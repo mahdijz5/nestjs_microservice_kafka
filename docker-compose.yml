@@ -4,7 +4,6 @@ services:
     image: obsidiandynamics/kafka
     restart: "no"
     ports:
-      - "2181:2181"
       - "9092:9092"
     environment:
       KAFKA_LISTENERS: "INTERNAL://:29092,EXTERNAL://:9092"
