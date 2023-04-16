@@ -15,3 +15,55 @@ services:
       KAFKA_RESTART_ATTEMPTS: "10"
       KAFKA_RESTART_DELAY: "5"
       ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: "0"
+
+  postgres:
+    image: postgres
+    env_file:
+      - .env
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./
+      dockerfile: ./apps/api/Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    depends_on:
+      - kafka
+      - auth
+      - post
+    volumes:
+      - .:/usr/src/app
+    command: npm run start:dev api
+
+  auth:
+    build:
+      context: ./
+      dockerfile: ./apps/auth/Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - kafka
+      - postgres
+    volumes:
+      - .:/usr/src/app
+    command: npm run start:dev auth 
+
+  post:
+    build:
+      context: ./
+      dockerfile: ./apps/post/Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - kafka
+      - postgres
+    volumes:
+      - .:/usr/src/app
+    command: npm run start:dev post 
+
