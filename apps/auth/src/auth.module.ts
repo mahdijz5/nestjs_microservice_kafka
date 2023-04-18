@@ -1,10 +1,15 @@
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { SharedModule, SharedService } from '@app/shared';
+import { OrmModule, SharedModule, SharedService, UserEntity } from '@app/shared';
 
 @Module({
-  imports: [SharedModule],
+  imports: [
+    SharedModule,
+    OrmModule,
+    TypeOrmModule.forFeature([UserEntity])
+  ],
   controllers: [AuthController],
   providers: [AuthService],
 })
