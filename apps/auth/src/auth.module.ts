@@ -6,9 +6,6 @@ import { SharedModule, SharedService } from '@app/shared';
 @Module({
   imports: [SharedModule],
   controllers: [AuthController],
-  providers: [{
-    provide: 'SharedServiceInterface',
-    useClass: SharedService,
-  },AuthService],
+  providers: [AuthService],
 })
 export class AuthModule {}
