@@ -11,6 +11,11 @@ export class AuthController {
   @MessagePattern('get-users')
   async getUsers(@Ctx() context: KafkaContext,@Payload() message) {
     this.sharedService.acknowledgeMessage(context);
-    // return message
+    console.log(23)
+  }
+
+  @MessagePattern('register-user')
+  async createUser(@Ctx() context: KafkaContext,@Payload() data) {
+    console.log(await this.authService.createUser(data))
   }
 }
