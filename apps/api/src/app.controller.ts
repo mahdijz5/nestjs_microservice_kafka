@@ -1,19 +1,32 @@
-import { Body, Controller, Get, Inject } from '@nestjs/common';
+import { Body, Controller, Get, Inject, OnModuleInit, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientKafka, ClientProxy } from '@nestjs/microservices';
 
 @Controller()
-export class AppController {
-  constructor(@Inject('AUTH_SERVICE') private readonly authService: ClientProxy) {}
+export class AppController implements OnModuleInit {
+  constructor(@Inject('AUTH_SERVICE') private readonly authService: ClientKafka) {}
   
-  @Get('user')
-  async getUsers() {
-    return this.authService.emit('get-users',{sd:"Sd"});
+  @Get('user/:id')
+  async getUsers(@Param("id") id : number ) {
+      return this.authService.send('get-users',{id})
   }
 
-  @Get('register')
-  async register(@Body() data) {
-    return this.authService.emit('register-user',data);
+  @Post('register')
+  async register(@Body() data ) {
+    return this.authService.send('register-user',data);
+  }
+
+  @Post('login')
+  async login(@Body() data ) {
+    return this.authService.send('login-user',data);
+  }
+
+
+  onModuleInit() {
+    this.authService.subscribeToResponseOf("get-users")
+    this.authService.subscribeToResponseOf("register-user")
+    this.authService.subscribeToResponseOf("login-user")
+    this.authService.subscribeToResponseOf("auth")
   }
 
 }
