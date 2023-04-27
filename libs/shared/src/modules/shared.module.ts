@@ -1,6 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientProxyFactory, Transport, } from '@nestjs/microservices';
+import { ClientProxyFactory, Transport,KafkaOptions } from '@nestjs/microservices';
 
 import { SharedService } from '../shared.service';
 
@@ -17,22 +17,25 @@ import { SharedService } from '../shared.service';
 export class SharedModule {
     static registerKafka(service: string, consumer: string): DynamicModule {
         const providers = [
-            {
+     {
                 provide: service,
                 useFactory: (configService: ConfigService) => {
                     const host = configService.get("KAFAKA_HOST")
                     return ClientProxyFactory.create({
                         transport: Transport.KAFKA,
                         options: {
+                            
                             client: {
                                 brokers: [host],
                             },
                             consumer: {
                                 groupId: consumer,
                             },
+                            
                         },
                     })
                 },
+                
                 inject: [ConfigService]
             }
         ]

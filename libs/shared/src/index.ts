@@ -9,4 +9,4 @@ export * from "./repositories/user.repository"
 export * from "./repositories/base/base.interface.repository"
 export * from "./modules/ormModule.module"
 
- 
+export * from "./filter/http-exception.filter"

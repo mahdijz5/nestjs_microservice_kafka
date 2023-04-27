@@ -21,9 +21,5 @@ export class SharedService implements SharedServiceInterface  {
     }
 
     acknowledgeMessage(context: KafkaContext) {
-        // const channel = context.get();
-        // const message = context.getMessage();
-        // channel.ack(message);
-        console.log(123456)
     }
 }

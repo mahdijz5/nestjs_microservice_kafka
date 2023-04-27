@@ -1,10 +1,11 @@
-import {  SharedService } from '@app/shared';
-import { BadRequestException, Controller, UseGuards} from '@nestjs/common';
+import {  HttpExceptionFilter, SharedService } from '@app/shared';
+import { UseFilters, Controller, UseGuards} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Ctx, EventPattern, KafkaContext, MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { JwtGuard } from './guards/jwt.guard';
 
+@UseFilters(HttpExceptionFilter)
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService,
@@ -16,7 +17,6 @@ export class AuthController {
       const user = await this.authService.getUser(message.id)
       return {...user}
     } catch (error) {
-      console.log(12314)
       throw error
     }
   }

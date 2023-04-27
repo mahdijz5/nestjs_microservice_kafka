@@ -35,7 +35,6 @@ services:
     depends_on:
       - kafka
       - auth
-      - post
     volumes:
       - .:/usr/src/app
     command: npm run start:dev api
@@ -54,19 +53,19 @@ services:
       - .:/usr/src/app
     command: npm run start:dev auth 
 
-  post:
-    container_name: post
-    build:
-      context: ./
-      dockerfile: ./apps/post/Dockerfile
-    env_file:
-      - .env
-    depends_on:
-      - kafka
-      - postgres
-    volumes:
-      - .:/usr/src/app
-    command: npm run start:dev post 
+  # post:
+    # container_name: post
+    # build:
+    #   context: ./
+    #   dockerfile: ./apps/post/Dockerfile
+    # env_file:
+    #   - .env
+    # depends_on:
+    #   - kafka
+    #   - postgres
+    # volumes:
+    #   - .:/usr/src/app
+    # command: npm run start:dev post 
 
   postgres:
     image: postgres:latest
