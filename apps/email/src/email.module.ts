@@ -1,15 +1,14 @@
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { OrmModule, SharedModule, SharedService, UserEntity, UsersRepository } from '@app/shared';
+import { EmailController } from './email.controller';
+import { EmailService } from './email.service';
+
+import { EmailEntity, EmailRepository, OrmModule, SharedModule } from '@app/shared';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtGuard } from './guards/jwt.guard';
-import { JwtStrategy } from './strategies/jwt.strategy';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { join } from 'path';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+
 @Module({
   imports: [MailerModule.forRootAsync({
     imports: [ConfigModule],
@@ -34,19 +33,16 @@ import { join } from 'path';
       }),
       inject: [ConfigService],
     }),
+    
     SharedModule,
-    SharedModule.registerKafka("EMAIL_SERVICE",process.env.KAFKA_EMAIL_CONSUMER),
     OrmModule,
-    TypeOrmModule.forFeature([UserEntity])
-  ],
-  controllers: [AuthController],
-  providers: [AuthService,
-    JwtGuard,
-    JwtStrategy,
+    TypeOrmModule.forFeature([EmailEntity])
+    ],
+  controllers: [EmailController],
+  providers: [EmailService,
     {
-      provide: 'UsersRepositoryInterface',
-      useClass: UsersRepository,
-    },],
-  
+      provide: 'EmailRepositoryInterface',
+      useClass: EmailRepository,
+    }],
 })
-export class AuthModule {}
+export class EmailModule {}

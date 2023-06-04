@@ -16,8 +16,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             secretOrKey: process.env.ACCESS_TOKRN_SECRET,
         });
     }
-
     async validate(payload: any) {
+        console.log(payload)
         return { ...payload };
     }
 }

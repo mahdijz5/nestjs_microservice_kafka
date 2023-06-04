@@ -11,6 +11,7 @@ services:
   
   kafka:
     image: confluentinc/cp-kafka:latest
+    container_name: kafka
     depends_on:
       - zookeeper
     ports:
@@ -18,57 +19,20 @@ services:
     environment:
       KAFKA_kafka_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:29092 
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_kafka_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-  api:
-    container_name: api-gateway
-    build:
-      context: ./
-      dockerfile: ./apps/api/Dockerfile
+  redis:
+    image: redis
+    container_name: redis
     ports:
-      - '3000:3000'
-    env_file:
-      - .env
-    depends_on:
-      - kafka
-      - auth
-    volumes:
-      - .:/usr/src/app
-    command: npm run start:dev api
-
-  auth:
-    container_name: auth
-    build:
-      context: ./
-      dockerfile: ./apps/auth/Dockerfile
-    env_file:
-      - .env
-    depends_on:
-      - kafka
-      - postgres
-    volumes:
-      - .:/usr/src/app
-    command: npm run start:dev auth 
-
-  # post:
-    # container_name: post
-    # build:
-    #   context: ./
-    #   dockerfile: ./apps/post/Dockerfile
-    # env_file:
-    #   - .env
-    # depends_on:
-    #   - kafka
-    #   - postgres
-    # volumes:
-    #   - .:/usr/src/app
-    # command: npm run start:dev post 
+      - 6379:6379
 
   postgres:
     image: postgres:latest
+    container_name: postgres
     env_file:
       - .env
     ports:
@@ -84,3 +48,62 @@ services:
       - .env
     ports:
       - '15432:80'
+
+        # api:
+  #   container_name: api-gateway
+  #   build:
+  #     context: ./
+  #     dockerfile: ./apps/api/Dockerfile
+  #   ports:
+  #     - '3000:3000'
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - kafka
+  #     - auth
+  #   volumes:
+  #     - .:/usr/src/app
+  #   command: npm run start:dev api
+
+  # auth:
+  #   container_name: auth
+  #   build:
+  #     context: ./
+  #     dockerfile: ./apps/auth/Dockerfile
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - kafka
+  #     - postgres
+  #   volumes:
+  #     - .:/usr/src/app
+  #   command: npm run start:dev auth 
+
+  # email:
+  #   container_name: email
+  #   build:
+  #     context: ./
+  #     dockerfile: ./apps/email/Dockerfile
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - kafka
+  #     - postgres
+  #   volumes:
+  #     - .:/usr/src/app
+  #   command: npm run start:dev email 
+
+  # post:
+    # container_name: post
+    # build:
+
+    #   context: ./
+    #   dockerfile: ./apps/post/Dockerfile
+    # env_file:
+    #   - .env
+    # depends_on:
+    #   - kafka
+    #   - postgres
+    # volumes:
+    #   - .:/usr/src/app
+    # command: npm run start:dev post 

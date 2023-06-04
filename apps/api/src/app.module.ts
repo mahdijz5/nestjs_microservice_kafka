@@ -8,7 +8,7 @@ import { SharedModule } from '@app/shared';
   imports: [ConfigModule.forRoot({
     isGlobal : true,
     envFilePath : './env'
-  }),SharedModule.registerKafka("AUTH_SERVICE",process.env.KAFKA_AUTH_CONSUMER)],
+  }),SharedModule.registerKafka("AUTH_SERVICE",process.env.KAFKA_AUTH_CONSUMER),SharedModule.registerKafka("EMAIL_SERVICE",process.env.KAFKA_EMAIL_CONSUMER)],
   controllers: [AppController],
   providers: [AppService],
 })

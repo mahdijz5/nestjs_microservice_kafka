@@ -1,13 +1,9 @@
 import { BeforeInsert, BeforeRemove, BeforeUpdate, Column, Entity,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity } from "./base.entity";
 
 
 @Entity()
-export class UserEntity {
-    @PrimaryGeneratedColumn({
-        type: "bigint"
-    })
-    id: number
-
+export class UserEntity  extends BaseEntity {
     @Column({
         type: "varchar",
         length: 150,

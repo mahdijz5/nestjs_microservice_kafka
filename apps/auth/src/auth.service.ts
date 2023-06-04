@@ -2,18 +2,22 @@ import { UserRepositoryInterface } from '@app/shared';
 import { Injectable, Inject, BadRequestException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { LoginUserDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
+import { ClientKafka } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
-  constructor(@Inject('UsersRepositoryInterface') private readonly usersRepository: UserRepositoryInterface, private jwtService: JwtService) { }
+  constructor(@Inject('UsersRepositoryInterface') private readonly usersRepository: UserRepositoryInterface, private jwtService: JwtService,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ) { }
   
   async createUser(data){
     const isExist = this.usersRepository.findByCondition({where :{email : data.email}})
     if(isExist) {
       throw new BadRequestException()
     }
-    const user = this.usersRepository.create(data)
-    return await this.usersRepository.save(user)
+
+    return true
+    
+    // const user = this.usersRepository.create(data)
+    // return await this.usersRepository.save(user)
   }
 
   async login(data : LoginUserDto){
@@ -56,7 +60,18 @@ export class AuthService {
     if(!user) {
       throw new NotFoundException("User not found.")
     }
-
+ 
     return user
   }
+
+  async test() {
+    await console.log("aut h service test")
+    this.emailService.emit("send-email",{
+      subject : "",
+      content : '',
+      address : "",
+    }) 
+    console.log(123)
+  }
+
 }

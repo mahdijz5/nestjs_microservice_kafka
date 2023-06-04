@@ -16,6 +16,9 @@ export class SharedService implements SharedServiceInterface  {
                 client: {
                     brokers: [host],
                 },
+                consumer: {
+                    groupId: customer,
+                },
             },
         };
     }
