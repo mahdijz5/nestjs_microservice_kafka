@@ -9,12 +9,11 @@ import { JwtGuard } from './guards/jwt.guard';
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService,
-    private readonly sharedService: SharedService  ) { }
+    private readonly sharedService: SharedService ,) { }
 
   @MessagePattern('get-users')
   async getUser(@Payload() message: { id: number },@Session() session) {
     try {
-      console.log(session)
       const user = await this.authService.getUser(message.id)
       return { ...user }
     } catch (error) {
@@ -37,14 +36,26 @@ export class AuthController {
 
   @MessagePattern('register-user')
   async createUser(@Payload() data: CreateUserDto) {
+    try {
+      return await this.authService.handleCreateUser(data)
+    } catch (error) {
+      throw error
+    }
+  }
 
-    console.log(await this.authService.createUser(data))
+  @MessagePattern('verify-email')
+  async verifyEmail(@Payload() data: {token : string}) {
+    try {
+      return await this.authService.verifyEmailByToken(data.token)
+    } catch (error) {
+      throw error
+    }
   }
 
   @MessagePattern('test')
   async test() {
     console.log("auth Controller2 ")
-    await this.authService.test()
+    
   }
 
   @MessagePattern('check')

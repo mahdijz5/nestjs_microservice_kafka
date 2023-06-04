@@ -12,13 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
   const configService = app.get(ConfigService); 
   const sharedService = app.get(SharedService);
-  app.use(
-    session({
-      secret: configService.get('SESSION_SECRET'),
-      resave: false,
-      saveUninitialized: false,
-    }),
-  );
+ 
   const customer = configService.get('KAFKA_AUTH_CONSUMER');
   
   app.connectMicroservice(sharedService.getRmqOptions(customer));

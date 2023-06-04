@@ -1,37 +1,39 @@
 import { EmailRepositoryInterface } from '@app/shared';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Inject, Injectable } from '@nestjs/common';
-import { sendEmailParams } from './utils/types';
-import * as ping  from 'ping';
+import * as ping from 'ping';
 import { Cron } from '@nestjs/schedule';
+import { EmailParams } from '@app/shared/types';
 
 @Injectable()
 export class EmailService {
-  constructor(@Inject('EmailRepositoryInterface') private readonly usersRepository: EmailRepositoryInterface,private mailerService: MailerService) {}
-  async sendEmail(data : sendEmailParams) {
+  constructor(@Inject('EmailRepositoryInterface') private readonly emailRepository: EmailRepositoryInterface, private mailerService: MailerService) { }
+  async sendEmail(data: EmailParams) {
     try {
       await this.handlePersistEmail(data);
-        // await this.mailerService.sendMail({
-        //     to: data.address,
-        //     subject: data.subject,
-        //     html : data.content
-        // })
-  
+      await this.mailerService.sendMail({
+        to: data.address,
+        subject: data.subject,
+        html: data.content
+      })
+
     } catch (error) {
+
     }
   }
 
-  private async handlePersistEmail(data : sendEmailParams) {
+  private async handlePersistEmail(data: EmailParams) {
     try {
-      await this.usersRepository.create(data)
-      await this.monitorGmailService();
+      const email = await this.emailRepository.create(data)
+      await this.emailRepository.save(email)
+      await this.HandleMonitorGmailService();
     } catch (error) {
       throw error
     }
   }
 
   @Cron('*/10 * * * * *')
-  private async monitorGmailService() {
+  private async HandleMonitorGmailService() {
     console.log("yyooo")
     const isServiceAvailable = await this.MonitorGmailService();
     console.log(isServiceAvailable)

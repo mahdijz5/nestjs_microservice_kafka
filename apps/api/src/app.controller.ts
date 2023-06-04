@@ -44,6 +44,11 @@ export class AppController implements OnModuleInit {
     return this.authService.emit('check', data);
   }
 
+  @Post('verify-email/:token')
+  async verifyEmail(@Param("token") token: string) {
+    return this.authService.send('verify-email', {token});
+  }
+
 
   onModuleInit() {
     this.authService.subscribeToResponseOf("get-users")
@@ -51,6 +56,7 @@ export class AppController implements OnModuleInit {
     this.authService.subscribeToResponseOf("login-user")
     this.authService.subscribeToResponseOf("auth")
     this.authService.subscribeToResponseOf("test")
+    this.authService.subscribeToResponseOf("verify-email")
   }
 
 }

@@ -3,21 +3,34 @@ import { Injectable, Inject, BadRequestException, NotFoundException, Unauthorize
 import { LoginUserDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { ClientKafka } from '@nestjs/microservices';
+import {CACHE_MANAGER} from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { CreateUserParams } from './types';
+import { EmailParams } from '@app/shared/types';
 
 @Injectable()
 export class AuthService {
-  constructor(@Inject('UsersRepositoryInterface') private readonly usersRepository: UserRepositoryInterface, private jwtService: JwtService,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ) { }
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache,@Inject('UsersRepositoryInterface') private readonly usersRepository: UserRepositoryInterface, private jwtService: JwtService,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ) { }
   
-  async createUser(data){
-    const isExist = this.usersRepository.findByCondition({where :{email : data.email}})
+
+  async getUser(id: number){
+    const user =await this.usersRepository.findOneById(id)
+    if(!user) {
+      throw new NotFoundException("User not found.")
+    }
+    return user
+  }
+
+
+  async handleCreateUser(data : CreateUserParams){
+    const isExist = await this.usersRepository.findByCondition({where :{email : data.email}})
     if(isExist) {
       throw new BadRequestException()
     }
 
-    return true
-    
-    // const user = this.usersRepository.create(data)
-    // return await this.usersRepository.save(user)
+    await this.cacheManager.set("userData",data)
+    await this.sendVerificationEmail({email : data.email , username : data.username})
+  
   }
 
   async login(data : LoginUserDto){
@@ -55,23 +68,39 @@ export class AuthService {
 }
 
 
-  async getUser(id: number){
-    const user =await this.usersRepository.findOneById(id)
-    if(!user) {
-      throw new NotFoundException("User not found.")
-    }
- 
-    return user
+  async sendVerificationEmail(data : {email : string, username :string}) {
+    let emailDetail : EmailParams | any = {}
+    const jwtToken = await  this.jwtService.sign({
+      username: data.username,
+      email: data.email,
+    },{secret : process.env.VERIFICATION_EMAIL_TOKEN_SECRET,expiresIn : "10m"})
+    
+    emailDetail.address = data.email;
+    emailDetail.subject = "no reply"
+    emailDetail.content = `${process.env.SERVER_URL}/verify-email/${jwtToken}`
+
+    this.emailService.emit("send-email",emailDetail) 
   }
 
-  async test() {
-    await console.log("aut h service test")
-    this.emailService.emit("send-email",{
-      subject : "",
-      content : '',
-      address : "",
-    }) 
-    console.log(123)
+  async verifyEmailByToken(token : string) {
+    try {
+      await this.jwtService.verify(token , {
+        secret : process.env.VERIFICATION_EMAIL_TOKEN_SECRET
+      })
+      await this.createUser()
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async createUser() {
+    try {
+      const userDate :CreateUserParams= await this.cacheManager.get("userData")
+      const user =  this.usersRepository.create(userDate)
+      await this.usersRepository.save(user);
+    } catch (error) {
+      throw error
+    }
   }
 
 }
