@@ -34,6 +34,7 @@
     "@nestjs/typeorm": "^9.0.1",
     "@types/nodemailer": "^6.4.8",
     "@types/ping": "^0.4.1",
+    "@types/shortid": "^0.0.29",
     "cache-manager-redis-store": "^3.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
@@ -51,6 +52,7 @@
     "redis": "^4.6.7",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "shortid": "^2.2.16",
     "typeorm": "^0.3.15",
     "un": "^0.0.0"
   },

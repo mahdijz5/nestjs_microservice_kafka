@@ -8,8 +8,8 @@ export class BaseEntity {
     id: number
 
     @Column({
-        type: 'varchar',
+        type: 'timestamp',
         default: new Date().toISOString(),
     })
-    createdAt: string;
+    createdAt: Date;
 }

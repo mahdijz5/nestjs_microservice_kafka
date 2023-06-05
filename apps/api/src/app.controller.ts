@@ -3,11 +3,15 @@ import { ClientKafka, ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { AuthGuard } from '@app/shared';
 import { MailerService } from "@nestjs-modules/mailer";
+import { Cron, CronExpression } from '@nestjs/schedule';
 @Controller()
 export class AppController implements OnModuleInit {
-  constructor(@Inject('AUTH_SERVICE') private readonly authService: ClientKafka ) { }
+  constructor(@Inject('AUTH_SERVICE') private readonly authService: ClientKafka,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ) { }
 
-
+  @Cron(CronExpression.EVERY_5_SECONDS)
+  async HandleMonitorGmailService() {
+    this.emailService.emit("monitor-email-service",{})
+  }
   
   @Get('user/:id')
   async getUsers(@Param("id") id: number) {
@@ -44,7 +48,7 @@ export class AppController implements OnModuleInit {
     return this.authService.emit('check', data);
   }
 
-  @Post('verify-email/:token')
+  @Get('verify-email/:token')
   async verifyEmail(@Param("token") token: string) {
     return this.authService.send('verify-email', {token});
   }

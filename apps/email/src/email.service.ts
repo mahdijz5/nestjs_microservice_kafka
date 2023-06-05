@@ -2,54 +2,68 @@ import { EmailRepositoryInterface } from '@app/shared';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Inject, Injectable } from '@nestjs/common';
 import * as ping from 'ping';
-import { Cron } from '@nestjs/schedule';
 import { EmailParams } from '@app/shared/types';
 
 @Injectable()
 export class EmailService {
+  private perviousEmailServiceStatus = true
   constructor(@Inject('EmailRepositoryInterface') private readonly emailRepository: EmailRepositoryInterface, private mailerService: MailerService) { }
+  
   async sendEmail(data: EmailParams) {
     try {
-      await this.handlePersistEmail(data);
       await this.mailerService.sendMail({
         to: data.address,
         subject: data.subject,
         html: data.content
       })
-
     } catch (error) {
-
+      await this.persistEmail(data);
     }
   }
 
-  private async handlePersistEmail(data: EmailParams) {
+  private async persistEmail(data: EmailParams) {
     try {
       const email = await this.emailRepository.create(data)
       await this.emailRepository.save(email)
-      await this.HandleMonitorGmailService();
     } catch (error) {
       throw error
     }
   }
+  
+  
+  async sendPersistedEmails() {
+    try {
+      const emails = await this.emailRepository.findAll({
+        order : {
+          id : 'DESC'
+        }
+      })
 
-  @Cron('*/10 * * * * *')
-  private async HandleMonitorGmailService() {
-    console.log("yyooo")
-    const isServiceAvailable = await this.MonitorGmailService();
-    console.log(isServiceAvailable)
-    if (isServiceAvailable) {
-      // Service is up, handle accordingly
-    } else {
-      // Service is down, handle accordingly
+      for(let email of emails) {
+        await this.sendEmail({...email})
+        await this.emailRepository.remove(email);
+      }
+
+    } catch (error) {
+      throw error      
     }
   }
 
 
-  private async MonitorGmailService(): Promise<boolean> {
-    const gmailHost = 'smtp.gmail.com';
-    const response = await ping.promise.probe(gmailHost);
+    // Will be called by Api 
+    async MonitorGmailService() {
+      const gmailHost = 'smtp.gmail.com';
+      const response = await ping.promise.probe(gmailHost);
+      const emailServiceStatus = response.alive
 
-    return response.alive;
+      if(emailServiceStatus && !this.perviousEmailServiceStatus) { // Time to send prisisted emails
+        this.sendPersistedEmails()
+      }
+
+    this.perviousEmailServiceStatus = emailServiceStatus
   }
+
+
+
 
 }

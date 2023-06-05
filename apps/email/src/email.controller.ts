@@ -7,6 +7,11 @@ import { EmailParams } from '@app/shared/types';
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
+  @MessagePattern('monitor-email-service')
+  async MonitorEmailService() {
+    this.emailService.MonitorGmailService()
+  }
+
   @MessagePattern("send-email")
   async sendEmail(@Payload() data  : EmailParams) {
     try {

@@ -7,6 +7,7 @@ import {CACHE_MANAGER} from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { CreateUserParams } from './types';
 import { EmailParams } from '@app/shared/types';
+import {generate} from 'shortid';
 
 @Injectable()
 export class AuthService {
@@ -27,9 +28,10 @@ export class AuthService {
     if(isExist) {
       throw new BadRequestException()
     }
+    const tokenId = generate();
 
-    await this.cacheManager.set("userData",data)
-    await this.sendVerificationEmail({email : data.email , username : data.username})
+    await this.cacheManager.set(`userData-${tokenId}-${data.username}`,data)
+    await this.sendVerificationEmail({email : data.email , username : data.username,tokenId})
   
   }
 
@@ -68,11 +70,12 @@ export class AuthService {
 }
 
 
-  async sendVerificationEmail(data : {email : string, username :string}) {
+  async sendVerificationEmail(data : {email : string, username :string, tokenId : string}) {
     let emailDetail : EmailParams | any = {}
     const jwtToken = await  this.jwtService.sign({
       username: data.username,
       email: data.email,
+      tokenId : data.tokenId
     },{secret : process.env.VERIFICATION_EMAIL_TOKEN_SECRET,expiresIn : "10m"})
     
     emailDetail.address = data.email;
@@ -84,18 +87,18 @@ export class AuthService {
 
   async verifyEmailByToken(token : string) {
     try {
-      await this.jwtService.verify(token , {
+      const decoded = await this.jwtService.verify(token , {
         secret : process.env.VERIFICATION_EMAIL_TOKEN_SECRET
       })
-      await this.createUser()
+      await this.createUser(decoded)
     } catch (error) {
       throw error
     }
   }
 
-  async createUser() {
+  async createUser(token : {tokenId : string, username : string}) {
     try {
-      const userDate :CreateUserParams= await this.cacheManager.get("userData")
+      const userDate :CreateUserParams= await this.cacheManager.get(`userData-${token.tokenId}-${token.username}`)
       const user =  this.usersRepository.create(userDate)
       await this.usersRepository.save(user);
     } catch (error) {

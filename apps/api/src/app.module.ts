@@ -3,12 +3,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import {ConfigModule} from '@nestjs/config'
 import { SharedModule } from '@app/shared';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [ConfigModule.forRoot({
+  imports: [ScheduleModule.forRoot(),ConfigModule.forRoot({
     isGlobal : true,
     envFilePath : './env'
-  }),SharedModule.registerKafka("AUTH_SERVICE",process.env.KAFKA_AUTH_CONSUMER),SharedModule.registerKafka("EMAIL_SERVICE",process.env.KAFKA_EMAIL_CONSUMER)],
+  }),
+  SharedModule.registerKafka("AUTH_SERVICE",process.env.KAFKA_AUTH_CONSUMER),
+  SharedModule.registerKafka("EMAIL_SERVICE",process.env.KAFKA_EMAIL_CONSUMER)],
   controllers: [AppController],
   providers: [AppService],
 })
