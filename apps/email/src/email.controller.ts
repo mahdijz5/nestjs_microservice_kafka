@@ -9,7 +9,7 @@ export class EmailController {
 
   @MessagePattern('monitor-email-service')
   async MonitorEmailService() {
-    this.emailService.MonitorGmailService()
+    this.emailService.monitorGmailService()
   }
 
   @MessagePattern("send-email")

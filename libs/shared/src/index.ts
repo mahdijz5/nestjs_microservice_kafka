@@ -4,6 +4,7 @@ export * from './interfaces/shared.service.interface';
 
 export * from "./entities/email.entity"
 export * from "./entities/user.entity"
+export * from "./entities/role.entity"
 export * from "./interfaces/users.repository.interface"
 export * from "./interfaces/email.repository.interface"
 export * from "./repositories/user.repository"

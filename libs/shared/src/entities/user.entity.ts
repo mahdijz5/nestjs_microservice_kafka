@@ -1,6 +1,6 @@
+import { RoleEntity } from '../';
 import { BeforeInsert, BeforeRemove, BeforeUpdate, Column, Entity,  JoinColumn,  ManyToOne,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
-import { RoleEntity } from "./role.entity";
 
 
 @Entity()

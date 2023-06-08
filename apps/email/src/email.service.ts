@@ -1,8 +1,8 @@
 import { EmailRepositoryInterface } from '@app/shared';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Inject, Injectable } from '@nestjs/common';
-import * as ping from 'ping';
 import { EmailParams } from '@app/shared/types';
+import {PingResponse,promise,sys} from 'ping';
 
 @Injectable()
 export class EmailService {
@@ -51,16 +51,16 @@ export class EmailService {
 
 
     // Will be called by Api 
-    async MonitorGmailService() {
-      const gmailHost = 'smtp.gmail.com';
-      const response = await ping.promise.probe(gmailHost);
-      const emailServiceStatus = response.alive
-
-      if(emailServiceStatus && !this.perviousEmailServiceStatus) { // Time to send prisisted emails
-        this.sendPersistedEmails()
-      }
-
-    this.perviousEmailServiceStatus = emailServiceStatus
+    monitorGmailService() {
+      let emailServiceStatus : boolean
+      sys.probe("108.177.126.109",(isAlive,error) => {
+        if(error) throw error
+        emailServiceStatus = isAlive
+          if(emailServiceStatus && !this.perviousEmailServiceStatus) { 
+            this.sendPersistedEmails()
+          }
+        this.perviousEmailServiceStatus = emailServiceStatus
+      });
   }
 
 

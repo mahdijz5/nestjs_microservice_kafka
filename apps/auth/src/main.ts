@@ -4,7 +4,7 @@ import {ConfigService} from '@nestjs/config'
 import { MicroserviceOptions,Transport } from '@nestjs/microservices';
 import { SharedService } from '@app/shared';
 import {ValidationPipe} from "@nestjs/common"
-import * as session from 'express-session';
+
 
 
 async function bootstrap() {

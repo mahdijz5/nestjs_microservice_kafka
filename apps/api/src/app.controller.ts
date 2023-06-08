@@ -10,6 +10,7 @@ export class AppController implements OnModuleInit {
 
   @Cron(CronExpression.EVERY_5_SECONDS)
   async HandleMonitorGmailService() {
+    console.log("check")
     this.emailService.emit("monitor-email-service",{})
   }
   
@@ -43,9 +44,14 @@ export class AppController implements OnModuleInit {
     return this.authService.send('test', data);
   }
 
-  @Post('check')
-  async check(@Body() data) {
-    return this.authService.emit('check', data);
+
+  @Get('reset-password/:token')
+  async resetPassword(@Body() data,@Param("token") token: string) {
+    return this.authService.send('reset-password', {...data,token});
+  }
+  @Post('forgot-password')
+  async forgotPassword(@Body() data) {
+    return this.authService.send('forgot-password', data);
   }
 
   @Get('verify-email/:token')
@@ -55,12 +61,12 @@ export class AppController implements OnModuleInit {
 
 
   onModuleInit() {
-    this.authService.subscribeToResponseOf("get-users")
-    this.authService.subscribeToResponseOf("register-user")
-    this.authService.subscribeToResponseOf("login-user")
-    this.authService.subscribeToResponseOf("auth")
-    this.authService.subscribeToResponseOf("test")
-    this.authService.subscribeToResponseOf("verify-email")
+
+    const subscribedResponses = ["get-users","register-user","login-user","auth","verify-email","forgot-password","reset-password"]
+
+    for(let response of subscribedResponses ) {
+      this.authService.subscribeToResponseOf(response)
+    }
   }
 
 }

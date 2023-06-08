@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ClientKafka } from '@nestjs/microservices';
 import {CACHE_MANAGER} from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { CreateUserParams } from './types';
+import { CreateUserParams, ForgotPasswordParams, ResetPasswordParams } from './types';
 import { EmailParams } from '@app/shared/types';
 import {generate} from 'shortid';
 
@@ -31,7 +31,7 @@ export class AuthService {
     const tokenId = generate();
 
     await this.cacheManager.set(`userData-${tokenId}-${data.username}`,data)
-    await this.sendVerificationEmail({email : data.email , username : data.username,tokenId})
+    await this.sendVerificationEmail({email : data.email , username : data.username,tokenId, address : `${process.env.SERVER_URL}/verify-email`})
   
   }
 
@@ -50,6 +50,18 @@ export class AuthService {
         throw error
     }
   }
+
+  async createUser(token : {tokenId : string, username : string}) {
+    try {
+      const userDate :CreateUserParams= await this.cacheManager.get(`userData-${token.tokenId}-${token.username}`)
+      const user =  this.usersRepository.create(userDate)
+      await this.usersRepository.save(user);
+    } catch (error) {
+      throw error
+    }
+  }
+
+
 
   generateToken(user ) {
     return {
@@ -70,21 +82,6 @@ export class AuthService {
 }
 
 
-  async sendVerificationEmail(data : {email : string, username :string, tokenId : string}) {
-    let emailDetail : EmailParams | any = {}
-    const jwtToken = await  this.jwtService.sign({
-      username: data.username,
-      email: data.email,
-      tokenId : data.tokenId
-    },{secret : process.env.VERIFICATION_EMAIL_TOKEN_SECRET,expiresIn : "10m"})
-    
-    emailDetail.address = data.email;
-    emailDetail.subject = "no reply"
-    emailDetail.content = `${process.env.SERVER_URL}/verify-email/${jwtToken}`
-
-    this.emailService.emit("send-email",emailDetail) 
-  }
-
   async verifyEmailByToken(token : string) {
     try {
       const decoded = await this.jwtService.verify(token , {
@@ -96,14 +93,52 @@ export class AuthService {
     }
   }
 
-  async createUser(token : {tokenId : string, username : string}) {
+
+  async handleForgotPassword(data : ForgotPasswordParams) {
+    const user =await this.usersRepository.findByCondition({
+      where : {email : data.email}
+    })
+    if(!user) throw new NotFoundException()
+
+    this.sendVerificationEmail({email : data.email,username : user.username,address:`${process.env.SERVER_URL}/reset-password`})
+  }
+
+  async handleResettingPassword(data : ResetPasswordParams) {
     try {
-      const userDate :CreateUserParams= await this.cacheManager.get(`userData-${token.tokenId}-${token.username}`)
-      const user =  this.usersRepository.create(userDate)
-      await this.usersRepository.save(user);
+      if(data.confirmPassword != data.password) throw new BadRequestException();
+
+      const decoded = await this.jwtService.verify(data.token , {
+        secret : process.env.VERIFICATION_EMAIL_TOKEN_SECRET
+      })
+      const user =await this.usersRepository.findByCondition({
+        where : {email : decoded.email}
+      })
+
+      user.password = data.password
+
+      return await this.usersRepository.save(user);
+
     } catch (error) {
       throw error
     }
   }
+  
+  async sendVerificationEmail(data : {email : string, username :string,address, tokenId?: string }) {
+    let emailDetail : EmailParams | any = {}
+    const jwtToken = await  this.jwtService.sign({
+      username: data.username,
+      email: data.email,
+      tokenId : data.tokenId || ""
+    },{secret : process.env.VERIFICATION_EMAIL_TOKEN_SECRET,expiresIn : "10m"})
+    
+    emailDetail.address = data.email;
+    emailDetail.subject = "no reply"
+    emailDetail.content = `<h1>Hello ${data.username}</h1></br><a href="${data.address}/${jwtToken}">Link</a> `
+
+    this.emailService.emit("send-email",emailDetail) 
+  }
+
+
+    
 
 }

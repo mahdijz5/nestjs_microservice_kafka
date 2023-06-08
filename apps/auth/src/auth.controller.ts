@@ -2,8 +2,9 @@ import { HttpExceptionFilter, SharedService } from '@app/shared';
 import { UseFilters, Controller, UseGuards, Inject, Session } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Ctx, EventPattern, KafkaContext, MessagePattern, Payload, RpcException, ClientKafka } from '@nestjs/microservices';
-import { CreateUserDto, LoginUserDto } from './dto';
+import { CreateUserDto, LoginUserDto, ResetPasswordDto } from './dto';
 import { JwtGuard } from './guards/jwt.guard';
+import { ForgotPasswordDto } from './dto/forgotPassword.dto';
 
 @UseFilters(HttpExceptionFilter)
 @Controller()
@@ -51,20 +52,23 @@ export class AuthController {
       throw error
     }
   }
-
-  @MessagePattern('test')
-  async test() {
-    console.log("auth Controller2 ")
-    
-  }
-
-  @MessagePattern('check')
-  async test1() {
-    console.log("alive. ")
-
-  }
-
  
+  @MessagePattern("forgot-password")
+  async handleFrogotPassword(@Payload() data : ForgotPasswordDto){
+    try {
+      return await this.authService.handleForgotPassword(data)
+    } catch (error) {
+      throw error
+    }
+  } 
+  @MessagePattern("reset-password")
+  async resetPassword(@Payload() data : ResetPasswordDto){
+    try {
+      return await this.authService.handleResettingPassword(data)
+    } catch (error) {
+      throw error
+    }
+  } 
 
   // onModuleInit() {
   //   this.emailService.subscribeToResponseOf("test")
