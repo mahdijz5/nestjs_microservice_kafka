@@ -1,5 +1,6 @@
-import { UserRepositoryInterface } from '@app/shared';
-import { Injectable, Inject, BadRequestException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { firstValueFrom } from 'rxjs';
+import { RoleEntity, UserRepositoryInterface, UserRoleRepositoryInterface } from '@app/shared';
+import { Injectable, Inject, BadRequestException, NotFoundException, UnauthorizedException, OnModuleInit } from '@nestjs/common';
 import { LoginUserDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { ClientKafka } from '@nestjs/microservices';
@@ -10,8 +11,8 @@ import { EmailParams } from '@app/shared/types';
 import {generate} from 'shortid';
 
 @Injectable()
-export class AuthService {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache,@Inject('UsersRepositoryInterface') private readonly usersRepository: UserRepositoryInterface, private jwtService: JwtService,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ) { }
+export class AuthService implements OnModuleInit {
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache,@Inject('UsersRepositoryInterface') private readonly usersRepository: UserRepositoryInterface,@Inject('UserRolesRepositoryInterface') private readonly userRolesRepository: UserRoleRepositoryInterface, private jwtService: JwtService,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka,@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka ) {}
   
 
   async getUser(id: number){
@@ -53,9 +54,23 @@ export class AuthService {
 
   async createUser(token : {tokenId : string, username : string}) {
     try {
-      const userDate :CreateUserParams= await this.cacheManager.get(`userData-${token.tokenId}-${token.username}`)
-      const user =  this.usersRepository.create(userDate)
+      const userData :CreateUserParams= await this.cacheManager.get(`userData-${token.tokenId}-${token.username}`)
+      
+      const user =  this.usersRepository.create(userData)
+      const userRole = await this.userRolesRepository.create({user})  
+      let role : RoleEntity
+      
+
+      if(userData.role.length > 0 ) {
+        role = await firstValueFrom(this.roleService.send("get-appropriate-role",{role : userData?.role || []}))
+      }
+
       await this.usersRepository.save(user);
+      
+      userRole.user = user
+      userRole.role = role
+      
+      await this.userRolesRepository.save(userRole)
     } catch (error) {
       throw error
     }
@@ -87,6 +102,7 @@ export class AuthService {
       const decoded = await this.jwtService.verify(token , {
         secret : process.env.VERIFICATION_EMAIL_TOKEN_SECRET
       })
+
       await this.createUser(decoded)
     } catch (error) {
       throw error
@@ -139,6 +155,8 @@ export class AuthService {
   }
 
 
-    
+  onModuleInit() {
+    this.roleService.subscribeToResponseOf("get-appropriate-role")
+  }
 
 }

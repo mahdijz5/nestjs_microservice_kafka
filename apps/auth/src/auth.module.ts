@@ -2,14 +2,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheStore, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { OrmModule, RoleEntity, SharedModule, SharedService, UserEntity, UsersRepository } from '@app/shared';
+import { OrmModule, RoleEntity, SharedModule, UserEntity, UserRoleEntity, UserRoleRepository, UsersRepository } from '@app/shared';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtGuard } from './guards/jwt.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { join } from 'path';
 import { CacheModule } from '@nestjs/cache-manager';
 import type { RedisClientOptions } from 'redis';
 import {redisStore} from 'cache-manager-redis-store';
@@ -22,10 +19,10 @@ import {redisStore} from 'cache-manager-redis-store';
       }),
       inject: [ConfigService],
     }),
-    SharedModule,
     SharedModule.registerKafka("EMAIL_SERVICE",process.env.KAFKA_EMAIL_CONSUMER),
+    SharedModule.registerKafka("ROLE_SERVICE",process.env.KAFKA_ROLE_CONSUMER),
+    TypeOrmModule.forFeature([UserEntity,UserRoleEntity,RoleEntity]),
     OrmModule,
-    TypeOrmModule.forFeature([UserEntity,RoleEntity]),
    
 CacheModule.registerAsync({
   isGlobal: true,
@@ -46,7 +43,11 @@ CacheModule.registerAsync({
     {
       provide: 'UsersRepositoryInterface',
       useClass: UsersRepository,
-    },],
+    },
+    {
+      provide : "UserRolesRepositoryInterface",
+      useClass : UserRoleRepository
+    }],
   
 })
 export class AuthModule {}
