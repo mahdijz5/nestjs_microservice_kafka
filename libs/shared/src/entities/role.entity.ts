@@ -1,14 +1,15 @@
 import {  Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { UserEntity } from "./user.entity";
-import { UserRoleEntity } from "./userRole.entity";
+import { UserRoleEntity } from "./junctionTables/userRole.entity";
 
 
 @Entity()
 export class RoleEntity  extends BaseEntity {
     @Column({
         length : 50,
-        unique : true
+        unique : true,
+        nullable : false,
     })
     name : string
 
@@ -17,6 +18,6 @@ export class RoleEntity  extends BaseEntity {
     })
     access : string[]
 
-    @ManyToOne(() => UserRoleEntity,(userRole) => userRole.role)
-    userRoles : UserRoleEntity
+    @OneToMany(() => UserRoleEntity,(userRole) => userRole.role)
+    userRoles : UserRoleEntity[]
 }

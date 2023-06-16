@@ -7,6 +7,7 @@ export class EmailEntity extends BaseEntity {
     @Column({
         type: "varchar",
         length: 150,
+        nullable : false,
     })
     address: string
 

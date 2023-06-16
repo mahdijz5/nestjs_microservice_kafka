@@ -1,7 +1,7 @@
 import { RoleEntity } from '../';
-import { BeforeInsert, BeforeRemove, BeforeUpdate, Column, Entity,  JoinColumn,  ManyToOne,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeRemove, BeforeUpdate, Column, Entity,  JoinColumn,  ManyToOne,  OneToMany,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
-import { UserRoleEntity } from './userRole.entity';
+import { UserRoleEntity } from './junctionTables/userRole.entity';
 
 
 @Entity()
@@ -9,22 +9,25 @@ export class UserEntity  extends BaseEntity {
     @Column({
         type: "varchar",
         length: 150,
-        unique: true
+        unique: true,
+        nullable : false,
     })
     email: string
 
     @Column({
         type: "varchar",
         length: 150,
+        nullable : false,
     })
     username: string
 
     @Column({
         type: "varchar",
+        nullable : false,
     })
     password: string
 
-    @ManyToOne(() => UserRoleEntity,(userRole) => userRole.user)
-    userRoles : UserRoleEntity
+    @OneToMany(() => UserRoleEntity,(userRole) => userRole.user)
+    userRoles : UserRoleEntity[]
 
 }
