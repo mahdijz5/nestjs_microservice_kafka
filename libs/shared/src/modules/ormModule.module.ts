@@ -4,6 +4,9 @@ import { ClientProxyFactory, Transport, } from '@nestjs/microservices';
 
 import { SharedService } from '../shared.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from '../entities/user.entity';
+import { RoleEntity } from '../entities/role.entity';
+import { UserRoleEntity } from '../entities/junctionTables/userRole.entity';
 
 @Module({
     imports: [
@@ -16,7 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
                 // password : configService.get("POSTGRES_PASSWORD"),
                 // port : parseInt(configService.get("POSTGRES_PORT")),
                 // database : configService.get("POSTGRES_DB"),
-                synchronize : false,
+                synchronize : true,
                 autoLoadEntities : true,
             }),
             inject : [ConfigService]

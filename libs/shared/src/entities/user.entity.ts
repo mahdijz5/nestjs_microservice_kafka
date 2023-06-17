@@ -1,7 +1,7 @@
 import { RoleEntity } from '../';
 import { BeforeInsert, BeforeRemove, BeforeUpdate, Column, Entity,  JoinColumn,  ManyToOne,  OneToMany,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
-import { UserRoleEntity } from './junctionTables/userRole.entity';
+import { UserRoleEntity } from '@app/shared';
 
 
 @Entity()

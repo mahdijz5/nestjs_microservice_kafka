@@ -1,7 +1,7 @@
-import {  Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import {  Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { UserEntity } from "./user.entity";
-import { UserRoleEntity } from "./junctionTables/userRole.entity";
+import { UserRoleEntity } from "@app/shared";
 
 
 @Entity()
