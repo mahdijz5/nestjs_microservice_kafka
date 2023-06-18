@@ -25,11 +25,11 @@ services:
       KAFKA_INTER_kafka_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-  redis:
-    image: redis
-    container_name: redis
-    ports:
-      - 6379:6379
+  # redis:
+  #   image: redis
+  #   container_name: redis
+  #   ports:
+  #     - 6379:6379
 
   postgres:
     image: postgres:latest
@@ -61,10 +61,24 @@ services:
   #     - .env
   #   depends_on:
   #     - kafka
-  #     - auth
   #   volumes:
   #     - .:/usr/src/app
   #   command: npm run start:dev api
+  
+  # ipg:
+  #   container_name: ipg
+  #   build:
+  #     context: ./
+  #     dockerfile: ./apps/ipg/Dockerfile
+  #   ports:
+  #     - '3000:3000'
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - kafka
+  #   volumes:
+  #     - .:/usr/src/app
+  #   command: npm run start:dev ipg
 
   # auth:
   #   container_name: auth
@@ -93,4 +107,32 @@ services:
   #   volumes:
   #     - .:/usr/src/app
   #   command: npm run start:dev email 
+
+  # role:
+  #   container_name: role
+  #   build:
+  #     context: ./
+  #     dockerfile: ./apps/role/Dockerfile
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - kafka
+  #     - postgres
+  #   volumes:
+  #     - .:/usr/src/app
+  #   command: npm run start:dev role 
+
+  # product:
+  #   container_name: product
+  #   build:
+  #     context: ./
+  #     dockerfile: ./apps/product/Dockerfile
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - kafka
+  #     - postgres
+  #   volumes:
+  #     - .:/usr/src/app
+  #   command: npm run start:dev product 
 

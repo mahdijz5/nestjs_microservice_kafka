@@ -13,7 +13,8 @@ import { ScheduleModule } from '@nestjs/schedule';
   SharedModule.registerKafka("AUTH_SERVICE",process.env.KAFKA_AUTH_CONSUMER),
   SharedModule.registerKafka("EMAIL_SERVICE",process.env.KAFKA_EMAIL_CONSUMER),
   SharedModule.registerKafka("PRODUCT_SERVICE",process.env.KAFKA_PRODUCT_CONSUMER),
-  SharedModule.registerKafka("ROLE_SERVICE",process.env.KAFKA_ROLE_CONSUMER)],
+  SharedModule.registerKafka("ROLE_SERVICE",process.env.KAFKA_ROLE_CONSUMER),
+  SharedModule.registerKafka("IPG_SERVICE",process.env.KAFKA_IPG_CONSUMER)],
   controllers: [AppController],
   providers: [AppService],
 })
