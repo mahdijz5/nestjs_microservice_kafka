@@ -13,7 +13,7 @@ export class AuthController {
     private readonly sharedService: SharedService ,) { }
 
   @MessagePattern('get-users')
-  async getUser(@Payload() message: { id: number },@Session() session) {
+  async getUser(@Payload() message: { id: string },@Session() session) {
     try {
       const user = await this.authService.getUser(message.id)
       return { ...user }

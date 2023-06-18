@@ -11,7 +11,7 @@ export type CreateIpgParams = {
 }
 
 export type UpdateIpgParams = {
-    id : number
+    id : string
     name : string,
     slug : string,
     status : boolean

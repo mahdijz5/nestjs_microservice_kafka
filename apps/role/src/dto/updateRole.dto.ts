@@ -6,5 +6,5 @@ export class UpdateRoleDto {
 
     @IsNumber()
     @IsNotEmpty()
-    id :number
+    id :string
 }

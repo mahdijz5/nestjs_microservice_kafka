@@ -12,5 +12,5 @@ export class CreatePackageDto {
     price : number
 
     @IsArray()
-    productIdList :number[]
+    productIdList :string[]
 }

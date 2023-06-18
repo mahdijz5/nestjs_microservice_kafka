@@ -2,14 +2,14 @@ import { IsNotEmpty, IsString,IsEmail, Length, IsArray, IsBoolean, IsNumber } fr
 
 export class UpdatePackageDto {
     @IsNotEmpty()
-    id :number
+    id :string
 
     @IsString()
     @Length(1,150)
     title : string
 
     @IsArray()
-    packageIdList?: number[] 
+    packageIdList?: string[] 
     
     @IsNumber()
     price : number

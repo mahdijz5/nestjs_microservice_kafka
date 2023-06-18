@@ -3,31 +3,31 @@ export type CreateProductParams = {
 }
 
 export type UpdateProductParams = {
-    id :number
+    id :string
     title ?: string
 }
 
 export type CreatePackageParams = {
     title : string
-    productIdList?: number[] 
+    productIdList?: string[] 
     price :number
 }
 
 export type UpdatePackageParams = {
-    id: number
+    id: string
     title?: string
-    productIdList?: number[] 
+    productIdList?: string[] 
     price?:number
 }
 
 export type CreateProductGroupParams = {
     title: string
-    packageIdList?: number[] 
+    packageIdList?: string[] 
 }
 
 export type UpdateProductGroupParams = {
-    id: number
+    id: string
     title?: string
-    packageIdList?: number[] 
+    packageIdList?: string[] 
     status ?: boolean
 }

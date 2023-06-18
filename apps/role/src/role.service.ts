@@ -50,7 +50,7 @@ export class RoleService {
     }
   }
 
-  async getRole(id : number) {
+  async getRole(id : string) {
     try {
       const role = await this.roleRepository.findByCondition({where : {id},relations : {userRoles : {user : true}}})
       return role      
@@ -86,7 +86,7 @@ export class RoleService {
     }
   }
 
-  async removeRole(id :number) {
+  async removeRole(id :string) {
     try {
       const role = await this.roleRepository.findByCondition({where : {id}})
       if(!role) throw new NotFoundException()

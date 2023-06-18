@@ -14,7 +14,7 @@ export class AppController implements OnModuleInit {
   }
   
   @Get('user/:id')
-  async getUsers(@Param("id") id: number) {
+  async getUsers(@Param("id") id: string) {
     try {
       return await firstValueFrom(this.authService.send('get-users', { id }))
     } catch (error) {
@@ -66,7 +66,7 @@ export class AppController implements OnModuleInit {
   }
 
   @Get("role/get-role/:id")
-  getRole(@Param("id") id : number) {
+  getRole(@Param("id") id : string) {
     return this.roleService.send("get-role",{id})
   }
   
@@ -76,28 +76,28 @@ export class AppController implements OnModuleInit {
   }
 
   @Get("role/edit-role/:id")
-  editRole(data , @Param("id") id :number) {
+  editRole(data , @Param("id") id :string) {
     return this.roleService.send("edit-role",{...data,id})
   }
 
   @Get("role/remove-role/:id")
-  removeRole(@Param("id") id :number) {
+  removeRole(@Param("id") id :string) {
     return this.roleService.send("remove-role",{id})
   }
 
   //Product
   @Get('product/get-product/:id')
-  async getProduct(@Param("id") id : number) {
+  async getProduct(@Param("id") id : string) {
     return this.productService.send('get-product', {id})
   }
 
   @Get('product/get-package/:id')
-  async getPackage(@Param("id") id : number) {
+  async getPackage(@Param("id") id : string) {
     return this.productService.send('get-package', {id})
   }
 
   @Get('product/create-product/:id')
-  async getProductPackage(@Param("id") id : number) {
+  async getProductPackage(@Param("id") id : string) {
     return this.productService.send('get-package-group', {id})
   }
   
@@ -122,12 +122,12 @@ export class AppController implements OnModuleInit {
   }
 
   @Put('product/edit-product/:id')
-  async updateProduct(@Body() data,@Param("id") id : number) {
+  async updateProduct(@Body() data,@Param("id") id : string) {
     return this.productService.send('update-product', {...data, id })
   }
 
   @Delete('product/remove-product/:id')
-  async removeProduct(@Body() data,@Param("id") id : number) {
+  async removeProduct(@Body() data,@Param("id") id : string) {
     return this.productService.send('remove-product', {...data, id})
   }
   @Post('product/create-package')
@@ -136,12 +136,12 @@ export class AppController implements OnModuleInit {
   }
 
   @Put('product/edit-package/:id')
-  async updatePackage(@Body() data,@Param("id") id : number) {
+  async updatePackage(@Body() data,@Param("id") id : string) {
     return this.productService.send('update-package', {...data, id })
   }
 
   @Delete('product/remove-package/:id')
-  async removePackage(@Body() data,@Param("id") id : number) {
+  async removePackage(@Body() data,@Param("id") id : string) {
     return this.productService.send('remove-package', {...data, id})
   }
   @Post('product/create-product-group')
@@ -150,12 +150,12 @@ export class AppController implements OnModuleInit {
   }
 
   @Put('product/edit-product-group/:id')
-  async updateProductGroup(@Body() data,@Param("id") id : number) {
+  async updateProductGroup(@Body() data,@Param("id") id : string) {
     return this.productService.send('update-product-group', {...data, id })
   }
 
   @Delete('product/remove-product-group/:id')
-  async removeProductGroup(@Body() data,@Param("id") id : number) {
+  async removeProductGroup(@Body() data,@Param("id") id : string) {
     return this.productService.send('remove-product-group', {...data, id})
   }
 
@@ -167,7 +167,7 @@ export class AppController implements OnModuleInit {
   }
 
   @Get("ipg/get-ipg/:id")
-  getPaymentGateway(@Param("id") id :number) {
+  getPaymentGateway(@Param("id") id :string) {
     return  this.ipgService.send("get-ipg",{id})
   } 
 
@@ -177,12 +177,12 @@ export class AppController implements OnModuleInit {
   }
 
   @Put("ipg/edit-ipg/:id")
-  editPaymentGateway(@Param("id") id :number,@Body() data) {
+  editPaymentGateway(@Param("id") id :string,@Body() data) {
     return this.ipgService.send("update-ipg",{id,...data})
   }
 
   @Delete("ipg/remove-ipg/:id")
-  removePaymentGateway(@Param("id") id :number) {
+  removePaymentGateway(@Param("id") id :string) {
     return this.ipgService.send("remove-ipg",{id})
   }
   

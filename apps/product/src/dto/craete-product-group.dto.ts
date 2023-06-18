@@ -7,7 +7,7 @@ export class CreateProductGroupDto {
     title : string
 
     @IsArray()
-    packageIdList?: number[] 
+    packageIdList?: string[] 
     
     @IsBoolean()
     status : boolean
