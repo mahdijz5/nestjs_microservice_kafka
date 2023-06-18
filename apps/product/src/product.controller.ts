@@ -1,12 +1,12 @@
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Controller, Get, UseFilters } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { CreatePackageDto } from './dto/createPackage.dto';
-import { UpdateProductDto } from './dto/updateProduct.dto';
-import { CreateProductDto } from './dto/createProduct.dto';
-import { UpdatePackageDto } from './dto/updatePackage.dto';
-import { CreateProductGroupDto } from './dto/craeteProductGroup.dto';
-import { UpdateProductGroupDto } from './dto/updateProductGroup.dto';
+import { CreatePackageDto } from './dto/create-package.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdatePackageDto } from './dto/update-package.dto';
+import { CreateProductGroupDto } from './dto/craete-product-group.dto';
+import { UpdateProductGroupDto } from './dto/update-productGroup.dto';
 import { HttpExceptionFilter } from '@app/shared';
 
 @UseFilters(new HttpExceptionFilter)

@@ -58,17 +58,17 @@ export class AuthService implements OnModuleInit {
       
       const user =  this.usersRepository.create(userData)
       const userRole = await this.userRolesRepository.create({user})  
-      let role : RoleEntity
+      // let role : RoleEntity
       
 
-      if(userData.role.length > 0 ) {
-        role = await firstValueFrom(this.roleService.send("get-appropriate-role",{role : userData?.role || []}))
-      }
+      // if(userData.role.length > 0 ) {
+      //   role = await firstValueFrom(this.roleService.send("get-appropriate-role",{role : userData?.role || []}))
+      // }
 
       await this.usersRepository.save(user);
       
       userRole.user = user
-      userRole.role = role
+      // userRole.role = role
       
       await this.userRolesRepository.save(userRole)
     } catch (error) {
