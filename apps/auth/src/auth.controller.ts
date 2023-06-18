@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { Ctx, EventPattern, KafkaContext, MessagePattern, Payload, RpcException, ClientKafka } from '@nestjs/microservices';
 import { CreateUserDto, LoginUserDto, ResetPasswordDto } from './dto';
 import { JwtGuard } from './guards/jwt.guard';
-import { ForgotPasswordDto } from './dto/forgotPassword.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
 @UseFilters(HttpExceptionFilter)
 @Controller()
