@@ -1,8 +1,8 @@
 import * as _ from "lodash";
 
 export const compareArrays = (currentArray,newArray) : {deleted: any[], added : any[]} => {
-    const deleted = _.differenceBy(currentArray, newArray,_.parseInt);
-    const added = _.differenceBy(newArray, currentArray,_.parseInt);
+    const deleted = _.difference(currentArray, newArray);
+    const added = _.difference(newArray, currentArray);
     return {deleted,added}
 }
 

@@ -32,7 +32,7 @@ export class ProductService {
         throw error
       }
   }
-  async getProduct(id :number) {
+  async getProduct(id :string) {
       try {
         console.log(id)
         return await this.productRepository.findByCondition( {where :{id}})
@@ -41,7 +41,7 @@ export class ProductService {
       }
   }
   
-  async getPackage(id :number) {
+  async getPackage(id :string) {
       try {
         return await this.packageRepository.findByCondition({ where :{id},relations : {packageProducts : {product  : true}}})
       } catch (error) {
@@ -49,7 +49,7 @@ export class ProductService {
       }
   }
 
-  async getProductGroup(id :number) {
+  async getProductGroup(id :string) {
       try {
         return await this.productGroupRepository.findByCondition({ where :{id},relations : {packages : {packageProducts : {product : true}}}})
       } catch (error) {
@@ -57,6 +57,7 @@ export class ProductService {
       }
   }
 
+  //? Craete Product
   async createProduct(data: CreateProductParams) {
     try {
       const isExist = await this.productRepository.findByCondition({ where: { title: data.title } })
@@ -71,7 +72,7 @@ export class ProductService {
     }
   }
 
-
+  //? Update product
   async updateProduct(data: UpdateProductParams) {
     try {
       const product = await this.productRepository.findByCondition({ where: { id: data.id } })
@@ -88,7 +89,9 @@ export class ProductService {
     }
   }
 
-  async deleteProduct(id: number) {
+
+  //Remove product
+  async deleteProduct(id: string) {
     try {
       const product = await this.productRepository.findByCondition({ where: { id } })
       if (!product) throw new NotFoundException()
@@ -109,9 +112,6 @@ export class ProductService {
       const newPackage = this.packageRepository.create({ title: data.title })
       let products: ProductEntity[]
 
-
-
-
       const packageVersion = await this.packageVersionRepository.create({ price: data.price, })
       await this.packageVersionRepository.save(packageVersion)
       newPackage.packageVersion = [packageVersion]
@@ -128,7 +128,7 @@ export class ProductService {
     }
   }
 
-  private async createPackageProduct(newPackage: PackageEntity, productIdList: number[]) {
+  private async createPackageProduct(newPackage: PackageEntity, productIdList: string[]) {
     try {
       let products: ProductEntity[]
       products = await this.productRepository.findAll({ where: { id: Any(productIdList) } })
@@ -169,23 +169,23 @@ export class ProductService {
 
   }
 
-  private async updateProductsOfPackage(newProductIdList: number[], currentPackage: PackageEntity): Promise<PackageEntity> {
+  private async updateProductsOfPackage(newProductIdList: string[], currentPackage: PackageEntity): Promise<PackageEntity> {
     try {
       let newPackage = { ...currentPackage }
 
-      const CurrentProductsIdList: number[] = _.map(newPackage.packageProducts, (n) => { return n.product.id })
+      const CurrentProductsIdList: string[] = _.map(newPackage.packageProducts, (n) => { return n.product.id })
 
-      const { added: addedProductsList, deleted: deletedProductsList } = compareArrays(CurrentProductsIdList, newProductIdList)
+      const { added : addedProduct, deleted: deletedProduct } = compareArrays(CurrentProductsIdList, newProductIdList)
 
-      if (!isEmpty(deletedProductsList)) {
-        const deletedPackageProducts = await this.packageProductsRepository.findAll({ where: { product: { id: Any(deletedProductsList) } }, relations: { product: true } })
+      if (!isEmpty(deletedProduct)) {
+        const deletedPackageProducts = await this.packageProductsRepository.findAll({ where: { product: { id: Any(deletedProduct) } }, relations: { product: true } })
         for (let packageProduct of deletedPackageProducts) {
           await this.packageProductsRepository.remove(packageProduct)
         }
       }
 
-      if (!isEmpty(addedProductsList)) {
-        const addedProducts = await this.productRepository.findAll({ where: { id: Any(addedProductsList) } })
+      if (!isEmpty(addedProduct)) {
+        const addedProducts = await this.productRepository.findAll({ where: { id: Any(addedProduct) } })
         for (let packageProduct of addedProducts) {
           let newPackageProduct = this.packageProductsRepository.create({ product: packageProduct, })
           newPackage.packageProducts.push(await this.packageProductsRepository.save(newPackageProduct))
@@ -213,7 +213,7 @@ export class ProductService {
   }
 
   //? Remove Package.............
-  async removePackage(id: number) {
+  async removePackage(id: string) {
     try {
       let targetedPackage = await this.packageRepository.findByCondition({ where: { id }, relations: { packageVersion: true, packageProducts: true } })
       if (!targetedPackage) throw new NotFoundException()
@@ -260,7 +260,7 @@ export class ProductService {
     }
   }
 
-  private async updateProducstOfProductGroup(currentProductGroup: ProductGroupEntity, newProductGroupIdList: number[]) {
+  private async updateProducstOfProductGroup(currentProductGroup: ProductGroupEntity, newProductGroupIdList: string[]) {
     let newGroup = { ...currentProductGroup }
 
     const currentProductGroupIdList = _.map(currentProductGroup.packages, (n) => { return n.id })
@@ -284,7 +284,7 @@ export class ProductService {
 
 
   //? Remove Product Group.............
-  async removeProductGroup(id: number) {
+  async removeProductGroup(id: string) {
     try {
       let group = await this.productGroupRepository.findByCondition({ where: { id: id } })
       if (!group) throw new NotFoundException()

@@ -17,7 +17,7 @@ export class IpgService {
     }
   }
 
-  async getPaymentGateway(id: number) {
+  async getPaymentGateway(id: string) {
     try {
       return await this.ipgRepository.findByCondition({ where: { id } })
     } catch (error) {
@@ -51,7 +51,7 @@ export class IpgService {
     }
   }
 
-  async removePaymentGateway(id :number) {
+  async removePaymentGateway(id :string) {
     try {
       const ipg = await this.ipgRepository.findOneById(id )
       if (!ipg) throw new NotFoundException()

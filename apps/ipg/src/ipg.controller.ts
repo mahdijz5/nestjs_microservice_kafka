@@ -21,7 +21,7 @@ export class IpgController {
   }
 
   @MessagePattern("get-ipg")
-  async getPaymentGateway(@Payload() data  : {id :number}) {
+  async getPaymentGateway(@Payload() data  : {id :string}) {
     try {
       return {...await this.ipgService.getPaymentGateway(data.id)}
     } catch (error) {
@@ -47,7 +47,7 @@ export class IpgController {
   }
 
   @MessagePattern("remove-ipg")
-  async removePaymentGateway(@Payload() data  : {id :number}) {
+  async removePaymentGateway(@Payload() data  : {id :string}) {
     try {
       return {...await this.ipgService.removePaymentGateway(data.id)}
     } catch (error) {

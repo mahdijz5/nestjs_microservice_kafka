@@ -3,14 +3,14 @@ import { IsNotEmpty, IsString,IsEmail, Length, IsArray, IsBoolean, IsNumber, IsE
 export class UpdateProductGroupDto {
     @IsNotEmpty()
     @IsNotEmpty()
-    id :number
+    id :string
 
     @IsString()
     @Length(1,150)
     title : string
 
     @IsArray()
-    packageIdList?: number[] 
+    packageIdList?: string[] 
     
     @IsBoolean()
     status : boolean

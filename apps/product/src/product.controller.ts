@@ -15,7 +15,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @MessagePattern("get-product")
-  async getProduct(@Payload() data : {id : number}) {
+  async getProduct(@Payload() data : {id : string}) {
     try {
       return {...await this.productService.getProduct(data.id)}
     } catch (err) {
@@ -23,7 +23,7 @@ export class ProductController {
     }
   }
   @MessagePattern("get-package")
-  async getPacakge(@Payload() data : {id : number}) {
+  async getPacakge(@Payload() data : {id : string}) {
     try {
       return {...await this.productService.getPackage(data.id)}
     } catch (err) {
@@ -31,7 +31,7 @@ export class ProductController {
     }
   }
   @MessagePattern("get-product-group")
-  async getProductGroup(@Payload() data : {id : number}) {
+  async getProductGroup(@Payload() data : {id : string}) {
     try {
       return {...await this.productService.getProductGroup(data.id)}
     } catch (err) {
@@ -83,7 +83,7 @@ export class ProductController {
   }
 
   @MessagePattern("remove-product")
-  async deleteProduct(@Payload() data : {id :number}) {
+  async deleteProduct(@Payload() data : {id :string}) {
     try {
       return {...await this.productService.deleteProduct(data.id)}
     } catch (err) {
@@ -109,7 +109,7 @@ export class ProductController {
   }
 
   @MessagePattern("remove-package")
-  async removePacakge(@Payload() data  : {id :number}) {
+  async removePacakge(@Payload() data  : {id :string}) {
     try {
       return await this.productService.removePackage(data.id)
     } catch (err) {
@@ -134,7 +134,7 @@ export class ProductController {
     }
   }
   @MessagePattern("remove-product-group")
-  async removeProductGroup(@Payload() data  : {id :number}) {
+  async removeProductGroup(@Payload() data  : {id :string}) {
     try {
       return await this.productService.removeProductGroup(data.id)
     } catch (err) {

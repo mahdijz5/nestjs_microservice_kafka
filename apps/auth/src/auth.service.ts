@@ -15,7 +15,7 @@ export class AuthService implements OnModuleInit {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache,@Inject('UsersRepositoryInterface') private readonly usersRepository: UserRepositoryInterface,@Inject('UserRolesRepositoryInterface') private readonly userRolesRepository: UserRoleRepositoryInterface, private jwtService: JwtService,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka,@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka ) {}
   
 
-  async getUser(id: number){
+  async getUser(id: string){
     const user =await this.usersRepository.findOneById(id)
     if(!user) {
       throw new NotFoundException("User not found.")

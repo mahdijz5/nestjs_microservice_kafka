@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString,IsEmail, Length, IsArray, IsBoolean, IsNumber } fr
 export class UpdateProductDto {
     @IsNotEmpty()
     @IsNumber()
-    id :number
+    id :string
     
     @IsString()
     @Length(1,150)

@@ -28,7 +28,7 @@ export class RoleController {
     }
   }
   @MessagePattern("get-role")
-  async getRole(@Payload() data : {id :number}) {
+  async getRole(@Payload() data : {id :string}) {
     try {
       return {...await this.roleService.getRole(data.id)}
     } catch (error) {
@@ -52,7 +52,7 @@ export class RoleController {
     }
   }
   @MessagePattern("remove-role")
-  async removeRole(@Payload() data : {id :number}) {
+  async removeRole(@Payload() data : {id :string}) {
     try {
       return {...await this.roleService.removeRole(data.id)}
     } catch (error) {

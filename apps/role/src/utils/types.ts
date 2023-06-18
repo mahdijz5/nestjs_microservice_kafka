@@ -3,6 +3,6 @@ export type CreateRoleParams = {
 }
 
 export type UpdateRoleParams = {
-    id :number
+    id :string
     name?: string
 }

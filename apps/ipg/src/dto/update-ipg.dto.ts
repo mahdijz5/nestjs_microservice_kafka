@@ -1,9 +1,9 @@
 import { IsBoolean, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class UpdateIpgDto  {
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    id :number
+    id :string
 
     @IsString()
     name : string
