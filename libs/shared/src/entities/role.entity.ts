@@ -13,10 +13,10 @@ export class RoleEntity  extends BaseEntity {
     })
     name : string
 
-    @Column({
-        type : "simple-array",
-    })
-    access : string[]
+    // @Column({
+    //     type : "simple-array",
+    // })
+    // access : string[]
 
     @OneToMany(() => UserRoleEntity,(userRole) => userRole.role)
     userRoles : UserRoleEntity[]

@@ -112,7 +112,6 @@ export class ProductService {
 
 
 
-      //productPackage version
       const packageVersion = await this.packageVersionRepository.create({ price: data.price, })
       await this.packageVersionRepository.save(packageVersion)
       newPackage.packageVersion = [packageVersion]

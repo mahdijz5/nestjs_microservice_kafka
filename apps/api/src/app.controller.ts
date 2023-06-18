@@ -6,7 +6,7 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { Cron, CronExpression } from '@nestjs/schedule';
 @Controller()
 export class AppController implements OnModuleInit {
-  constructor(@Inject('AUTH_SERVICE') private readonly authService: ClientKafka,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ,@Inject('PRODUCT_SERVICE') private readonly productService: ClientKafka) { }
+  constructor(@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka,@Inject('AUTH_SERVICE') private readonly authService: ClientKafka,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ,@Inject('PRODUCT_SERVICE') private readonly productService: ClientKafka) { }
 
   @Cron(CronExpression.EVERY_5_SECONDS)
   async HandleMonitorGmailService() {
@@ -56,6 +56,33 @@ export class AppController implements OnModuleInit {
   @Get('verify-email/:token')
   async verifyEmail(@Param("token") token: string) {
     return this.authService.send('verify-email', {token});
+  }
+
+
+  //role
+  @Get("role/get-all-roles")
+  getAllRole() {
+    return this.roleService.send("get-all-roles",{})
+  }
+
+  @Get("role/get-role/:id")
+  getRole(@Param("id") id : number) {
+    return this.roleService.send("get-role",{id})
+  }
+  
+  @Get("role/create-role")
+  createRole(data) {
+    return this.roleService.send("create-get",data)
+  }
+
+  @Get("role/edit-role/:id")
+  editRole(data , @Param("id") id :number) {
+    return this.roleService.send("edit-role",{...data,id})
+  }
+
+  @Get("role/remove-role/:id")
+  removeRole(@Param("id") id :number) {
+    return this.roleService.send("remove-role",{id})
   }
 
   //Product
@@ -135,14 +162,19 @@ export class AppController implements OnModuleInit {
   onModuleInit() {
 
     const authSubscribedResponses = ["get-users","register-user","login-user","auth","verify-email","forgot-password","reset-password" ]
-
+    const roleSubscribedResponses =  []
     const productSubscribedResponses = ["create-product","update-product" ,"remove-product","create-package","update-package" ,"remove-package","create-product-group","update-product-group","remove-product-group","get-product","get-package","get-product-group","get-all-product","get-all-package","get-all-product-group"]
+
 
 
     for(let response of authSubscribedResponses ) {
       this.authService.subscribeToResponseOf(response)
     }
-
+    
+    for(let response of roleSubscribedResponses ) {
+      this.roleService.subscribeToResponseOf(response)
+    }
+    
     for(let response of productSubscribedResponses ) {
       this.productService.subscribeToResponseOf(response)
     }
