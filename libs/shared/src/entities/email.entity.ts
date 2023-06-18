@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeRemove, BeforeUpdate, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {  Column, Entity } from "typeorm";
 import { BaseEntity } from "./base.entity";
 
 

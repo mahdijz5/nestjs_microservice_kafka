@@ -1,6 +1,7 @@
 //modules
 export * from './modules/shared.module';
 export * from "./modules/ormModule.module"
+export * from "./modules/errorHandling.module"
 
 //services
 export * from './shared.service';
@@ -45,3 +46,6 @@ export * from "./filter/http-exception.filter"
 
 //Guards
 export * from "./guards/auth.guard"
+
+//Enum
+export * from "./enums/error.enum"

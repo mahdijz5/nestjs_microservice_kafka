@@ -71,6 +71,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/product/tsconfig.app.json"
       }
+    },
+    "ipg": {
+      "type": "application",
+      "root": "apps/ipg",
+      "entryFile": "main",
+      "sourceRoot": "apps/ipg/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/ipg/tsconfig.app.json"
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, OnModuleInit, Param, Post, Session,Req, UseFilters, UseGuards, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Inject, OnModuleInit, Param, Post, Session,Req, UseFilters, UseGuards, Put, Delete, Query } from '@nestjs/common';
 import { ClientKafka, ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { AuthGuard } from '@app/shared';
@@ -6,7 +6,7 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { Cron, CronExpression } from '@nestjs/schedule';
 @Controller()
 export class AppController implements OnModuleInit {
-  constructor(@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka,@Inject('AUTH_SERVICE') private readonly authService: ClientKafka,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ,@Inject('PRODUCT_SERVICE') private readonly productService: ClientKafka) { }
+  constructor(@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka,@Inject('AUTH_SERVICE') private readonly authService: ClientKafka,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ,@Inject('PRODUCT_SERVICE') private readonly productService: ClientKafka,@Inject("IPG_SERVICE") private readonly ipgService : ClientKafka) { }
 
   @Cron(CronExpression.EVERY_5_SECONDS)
   async HandleMonitorGmailService() {
@@ -159,10 +159,39 @@ export class AppController implements OnModuleInit {
     return this.productService.send('remove-product-group', {...data, id})
   }
 
+  //Ipg
+
+  @Get("ipg/get-all-ipg")
+  getAllPaymentGateway(@Query() query : {page :number, searchQuery : string}) {
+    return this.ipgService.send("get-all-ipg",{ page : query.page , searchQuery : query.searchQuery,limit : 2})
+  }
+
+  @Get("ipg/get-ipg/:id")
+  getPaymentGateway(@Param("id") id :number) {
+    return  this.ipgService.send("get-ipg",{id})
+  } 
+
+  @Post("ipg/create-ipg") 
+  createPaymentGateway(@Body() data) {
+    return this.ipgService.send("create-ipg",data)
+  }
+
+  @Put("ipg/edit-ipg/:id")
+  editPaymentGateway(@Param("id") id :number,@Body() data) {
+    return this.ipgService.send("update-ipg",{id,...data})
+  }
+
+  @Delete("ipg/remove-ipg/:id")
+  removePaymentGateway(@Param("id") id :number) {
+    return this.ipgService.send("remove-ipg",{id})
+  }
+  
+
   onModuleInit() {
 
     const authSubscribedResponses = ["get-users","register-user","login-user","auth","verify-email","forgot-password","reset-password" ]
-    const roleSubscribedResponses =  []
+    const roleSubscribedResponses =  ["get-all-roles","get-role","edit-role","remove-role","create-role"]
+    const ipgSubscribedResponses =  ['get-all-ipg','get-ipg','create-ipg','update-ipg','remove-ipg']
     const productSubscribedResponses = ["create-product","update-product" ,"remove-product","create-package","update-package" ,"remove-package","create-product-group","update-product-group","remove-product-group","get-product","get-package","get-product-group","get-all-product","get-all-package","get-all-product-group"]
 
 
@@ -177,6 +206,10 @@ export class AppController implements OnModuleInit {
     
     for(let response of productSubscribedResponses ) {
       this.productService.subscribeToResponseOf(response)
+    }
+
+    for(let response of ipgSubscribedResponses ) {
+      this.ipgService.subscribeToResponseOf(response)
     }
   }
 }
