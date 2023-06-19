@@ -6,7 +6,7 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { Cron, CronExpression } from '@nestjs/schedule';
 @Controller()
 export class AppController implements OnModuleInit {
-  constructor(@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka,@Inject('AUTH_SERVICE') private readonly authService: ClientKafka,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ,@Inject('PRODUCT_SERVICE') private readonly productService: ClientKafka,@Inject("IPG_SERVICE") private readonly ipgService : ClientKafka) { }
+  constructor(@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka,@Inject('AUTH_SERVICE') private readonly authService: ClientKafka,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ,@Inject('PRODUCT_SERVICE') private readonly productService: ClientKafka,@Inject("IPG_SERVICE") private readonly ipgService : ClientKafka,@Inject("COURSE_SERVICE") private readonly courseService : ClientKafka) { }
 
   @Cron(CronExpression.EVERY_5_SECONDS)
   async HandleMonitorGmailService() {
@@ -83,6 +83,32 @@ export class AppController implements OnModuleInit {
   @Get("role/remove-role/:id")
   removeRole(@Param("id") id :string) {
     return this.roleService.send("remove-role",{id})
+  }
+
+  ///course
+  @Get("course/get-all-courses")
+  getAllCourse() {
+    return this.courseService.send("get-all-courses",{})
+  }
+
+  @Get("course/get-course/:id")
+  getCourse(@Param("id") id : string) {
+    return this.courseService.send("get-course",{id})
+  }
+  
+  @Get("course/create-course")
+  createCourse(data) {
+    return this.courseService.send("create-get",data)
+  }
+
+  @Get("course/edit-course/:id")
+  editCourse(data , @Param("id") id :string) {
+    return this.courseService.send("edit-course",{...data,id})
+  }
+
+  @Get("course/remove-course/:id")
+  removeCourse(@Param("id") id :string) {
+    return this.courseService.send("remove-course",{id})
   }
 
   //Product
@@ -201,6 +227,7 @@ export class AppController implements OnModuleInit {
 
     const authSubscribedResponses = ["get-users","register-user","login-user","auth","verify-email","forgot-password","reset-password" ]
     const roleSubscribedResponses =  ["get-all-roles","get-role","edit-role","remove-role","create-role"]
+    const courseSubscribedResponses =  ["get-all-courses","get-course","edit-course","remove-course","create-course"]
     const ipgSubscribedResponses =  ['get-all-ipg','get-ipg','create-ipg','update-ipg','remove-ipg',"handle-payment","payment-callback"]
     const productSubscribedResponses = ["create-product","update-product" ,"remove-product","create-package","update-package" ,"remove-package","create-product-group","update-product-group","remove-product-group","get-product","get-package","get-product-group","get-all-product","get-all-package","get-all-product-group"]
 
@@ -212,6 +239,10 @@ export class AppController implements OnModuleInit {
     
     for(let response of roleSubscribedResponses ) {
       this.roleService.subscribeToResponseOf(response)
+    }
+
+    for(let response of courseSubscribedResponses ) {
+      this.courseService.subscribeToResponseOf(response)
     }
     
     for(let response of productSubscribedResponses ) {

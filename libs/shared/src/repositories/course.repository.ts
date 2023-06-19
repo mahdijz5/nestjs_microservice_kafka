@@ -7,7 +7,7 @@ import { courseRepositoryInterface } from '../interfaces/course.repository.inter
 import { CourseEntity } from '../entities/course.entity';
 
 @Injectable()
-export class courseRepository
+export class CourseRepository
   extends BaseAbstractRepository<CourseEntity>
   implements courseRepositoryInterface
 {

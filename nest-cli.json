@@ -80,6 +80,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/ipg/tsconfig.app.json"
       }
+    },
+    "course": {
+      "type": "application",
+      "root": "apps/course",
+      "entryFile": "main",
+      "sourceRoot": "apps/course/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/course/tsconfig.app.json"
+      }
     }
   }
 }

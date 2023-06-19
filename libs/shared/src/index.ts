@@ -18,6 +18,7 @@ export * from "./entities/junction-tables/userRole.entity"
 export * from "./entities/junction-tables/packageProducts.entity"
 
 //interfaces
+export * from "./repositories/base/base.interface.repository"
 export * from "./interfaces/users.repository.interface"
 export * from "./interfaces/email.repository.interface"
 export * from "./interfaces/role.repository.interface"
@@ -27,7 +28,6 @@ export * from "./interfaces/product.repository.interface"
 export * from "./interfaces/productGroup.repository.interface"
 export * from "./interfaces/packageProducts.repository.interface"
 export * from "./interfaces/userRole.repository.interface"
-export * from "./repositories/base/base.interface.repository"
 export * from './interfaces/shared.service.interface';
 
 //repositories

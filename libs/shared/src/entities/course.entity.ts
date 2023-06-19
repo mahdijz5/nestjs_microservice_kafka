@@ -5,6 +5,12 @@ import { BaseEntity } from "./base.entity";
 @Entity()
 export class CourseEntity extends BaseEntity {
     @Column({
+        unique : true,
+        type : "varchar"
+    })
+    name : string
+    
+    @Column({
         type: "varchar",
     })
     from: string
@@ -17,6 +23,10 @@ export class CourseEntity extends BaseEntity {
     @Column({
         type: "varchar",
     })
-    type: "calculation" | "beginnig"
+    type: "calculation" | "beginning"
+
+
+    @Column({type : "int2"})
+    rate :number
 
 }
