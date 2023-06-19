@@ -20,7 +20,6 @@ export type UpdateIpgParams = {
 
 export type CreatePaymentParams = {
     packageVersionId : string
-    email :string
 }
 
 export type RequsetPaymentParams = {

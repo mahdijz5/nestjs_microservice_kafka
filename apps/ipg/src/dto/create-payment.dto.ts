@@ -5,8 +5,5 @@ export class CreatePaymentDto {
     @IsString()
     @IsNotEmpty()
     packageVersionId : string
-    
-    @IsEmail()
-    @IsNotEmpty()
-    email : string
+
 }
