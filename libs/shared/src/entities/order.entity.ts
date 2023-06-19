@@ -7,7 +7,7 @@ import { PaymentGatewayEntity } from "./paymentGateway.entity";
 
 @Entity()
 export class OrderEntity extends BaseEntity {
-  @PrimaryGeneratedColumn({
+  @Column({
     type: "bigint"
   })
   id_order: number
@@ -16,7 +16,7 @@ export class OrderEntity extends BaseEntity {
   @ManyToOne(() => PackageVersionEntity, (ver) => ver.order, { onDelete: "SET NULL" })
   packageVersion: PackageVersionEntity
 
-  @Column({ type: "varchar" })
+  @Column({ type: "varchar" ,default : "other"})
   type: "online" | "wallet" | "other"
 
   @Column()
