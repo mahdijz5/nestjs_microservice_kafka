@@ -3,11 +3,12 @@ import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { OrmModule, PackageEntity, PackageProductEntity, PackageProductRepository, PackageRepository, PackageVersionEntity, PackageVersionRepository, ProductEntity, ProductGroupEntity, ProductGroupRepository, ProductRepository, SharedModule } from '@app/shared';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { OrderEntity } from '@app/shared/entities/order.entity';
 
 @Module({
   imports: [ SharedModule,
     OrmModule,
-    TypeOrmModule.forFeature([ProductEntity,PackageProductEntity,PackageEntity,PackageVersionEntity,ProductGroupEntity])],
+    TypeOrmModule.forFeature([ProductEntity,PackageProductEntity,PackageEntity,PackageVersionEntity,ProductGroupEntity,OrderEntity])],
   controllers: [ProductController],
   providers: [ProductService,
   {

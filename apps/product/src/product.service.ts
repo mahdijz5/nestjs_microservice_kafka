@@ -197,10 +197,10 @@ export class ProductService {
     }
   }
 
-  private async updatePackageVersion(currentPackage: PackageEntity, price: number) {
+  private async updatePackageVersion(currentPackage: PackageEntity, price: number | any) {
     let newPackage = { ...currentPackage }
-
-    if (price !== newPackage.packageVersion.slice(-1)[0].price) {
+    
+    if (parseInt(price) !== _.last(newPackage.packageVersion).price) {
       const packageVersion = await this.packageVersionRepository.create({
         package: newPackage,
         price: price

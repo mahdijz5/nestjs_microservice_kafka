@@ -70,8 +70,6 @@ export class AuthController {
     }
   } 
 
-  // onModuleInit() {
-  //   this.emailService.subscribeToResponseOf("test")
-  // }
+
 
 }

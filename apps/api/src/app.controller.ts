@@ -96,7 +96,7 @@ export class AppController implements OnModuleInit {
     return this.productService.send('get-package', {id})
   }
 
-  @Get('product/create-product/:id')
+  @Get('product/get-product-group/:id')
   async getProductPackage(@Param("id") id : string) {
     return this.productService.send('get-package-group', {id})
   }
@@ -111,7 +111,7 @@ export class AppController implements OnModuleInit {
     return this.productService.send('get-all-package', {})
   }
 
-  @Get('product/create-all-product')
+  @Get('product/get-all-product-group')
   async getAllProductPackage() {
     return this.productService.send('get-all-package-group', {})
   }

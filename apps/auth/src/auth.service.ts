@@ -11,7 +11,7 @@ import { EmailParams } from '@app/shared/types';
 import {generate} from 'shortid';
 
 @Injectable()
-export class AuthService implements OnModuleInit {
+export class AuthService   {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache,@Inject('UsersRepositoryInterface') private readonly usersRepository: UserRepositoryInterface,@Inject('UserRolesRepositoryInterface') private readonly userRolesRepository: UserRoleRepositoryInterface, private jwtService: JwtService,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka,@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka ) {}
   
 
@@ -144,9 +144,5 @@ export class AuthService implements OnModuleInit {
     this.emailService.emit("send-email",emailDetail) 
   }
 
-
-  onModuleInit() {
-    this.roleService.subscribeToResponseOf("get-appropriate-role")
-  }
 
 }
