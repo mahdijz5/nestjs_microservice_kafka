@@ -1,10 +1,10 @@
 import { Controller, Get, UseFilters } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { GetAppropriateRoleDto } from './dto/getAppropriateRole.dto';
+import { GetAppropriateRoleDto } from './dto/get-appropriate-role.dto';
 import { HttpExceptionFilter } from '@app/shared';
-import { CreateRoleDto } from './dto/createRole.dto';
-import { UpdateRoleDto } from './dto/updateRole.dto';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @UseFilters(HttpExceptionFilter)
 @Controller()

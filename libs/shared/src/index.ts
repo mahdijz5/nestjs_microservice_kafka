@@ -14,8 +14,8 @@ export * from "./entities/product.entity"
 export * from "./entities/packageVersion.entity"
 export * from "./entities/package.entity"
 export * from "./entities/productGroup.entity"
-export * from "./entities/junctionTables/userRole.entity"
-export * from "./entities/junctionTables/packageProducts.entity"
+export * from "./entities/junction-tables/userRole.entity"
+export * from "./entities/junction-tables/packageProducts.entity"
 
 //interfaces
 export * from "./interfaces/users.repository.interface"

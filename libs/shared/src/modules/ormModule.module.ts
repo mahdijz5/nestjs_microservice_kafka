@@ -6,7 +6,7 @@ import { SharedService } from '../shared.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { RoleEntity } from '../entities/role.entity';
-import { UserRoleEntity } from '../entities/junctionTables/userRole.entity';
+import { UserRoleEntity } from '../entities/junction-tables/userRole.entity';
 
 @Module({
     imports: [

@@ -1,6 +1,6 @@
 import { RoleEntity, RoleRepositoryInterface, UserRoleEntity, UserRoleRepositoryInterface } from '@app/shared';
 import { Injectable,Inject ,BadRequestException,NotFoundException} from '@nestjs/common';
-import { GetAppropriateRoleDto } from './dto/getAppropriateRole.dto';
+import { GetAppropriateRoleDto } from './dto/get-appropriate-role.dto';
 import { Any } from 'typeorm';
 import { CreateRoleParams, UpdateRoleParams } from './utils/types';
 import { isEmpty } from './utils/tools';
