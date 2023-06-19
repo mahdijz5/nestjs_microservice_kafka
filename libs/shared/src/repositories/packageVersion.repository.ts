@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BaseAbstractRepository } from './base/base.abstract.repository';
-import { PackageVersionEntity } from '../entities/packageVersion.entity';
+import { PackageVersionEntity } from '../entities/package-version.entity';
 import { PackageVersionRepositoryInterface } from '../interfaces/packageVersion.repository.interface';
 
 @Injectable()

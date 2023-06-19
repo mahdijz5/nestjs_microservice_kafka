@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { BaseAbstractRepository } from './base/base.abstract.repository';
 import { ProductRepositoryInterface } from '../interfaces/product.repository.interface';
 import { ProductGroupRepositoryInterface } from '../interfaces/productGroup.repository.interface';
-import { ProductGroupEntity } from '../entities/productGroup.entity';
+import { ProductGroupEntity } from '../entities/product-group.entity';
 
 @Injectable()
 export class ProductGroupRepository

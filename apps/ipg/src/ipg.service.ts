@@ -75,7 +75,7 @@ export class IpgService {
       if (!packageVersion) throw new NotFoundException()
 
       
-      const paymentResult:AxiosResponse<RequsetPaymentResultParams> = await firstValueFrom(this.httpService.post("https://gateway.zibal.ir/request/lazy", <RequsetPaymentParams>{
+      const paymentResult :AxiosResponse<RequsetPaymentResultParams> = await firstValueFrom(this.httpService.post("https://gateway.zibal.ir/request/lazy", <RequsetPaymentParams>{
         merchant: process.env.MERCHANT,
         amount: packageVersion.price,
         callbackUrl: `${process.env.SERVER_URL}/ipg/payment-result`,

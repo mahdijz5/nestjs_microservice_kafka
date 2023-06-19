@@ -1,4 +1,4 @@
-import { PackageVersionEntity } from "../entities/packageVersion.entity";
+import { PackageVersionEntity } from "../entities/package-version.entity";
 import { BaseInterfaceRepository } from "../repositories/base/base.interface.repository";
 
 

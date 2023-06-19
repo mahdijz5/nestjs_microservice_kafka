@@ -4,7 +4,7 @@ import { ProductService } from './product.service';
 import { OrmModule, PackageEntity, PackageProductEntity, PackageProductRepository, PackageRepository, PackageVersionEntity, PackageVersionRepository, ProductEntity, ProductGroupEntity, ProductGroupRepository, ProductRepository, SharedModule } from '@app/shared';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderEntity } from '@app/shared/entities/order.entity';
-import { PaymentGatewayEntity } from '@app/shared/entities/paymentGateway.entity';
+import { PaymentGatewayEntity } from '@app/shared/entities/payment-gateway.entity';
 
 @Module({
   imports: [ SharedModule,

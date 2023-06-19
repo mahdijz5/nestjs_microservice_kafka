@@ -1,4 +1,4 @@
-import { PaymentGatewayEntity } from "../entities/paymentGateway.entity";
+import { PaymentGatewayEntity } from "../entities/payment-gateway.entity";
 import { BaseInterfaceRepository } from "../repositories/base/base.interface.repository";
 
 

@@ -3,7 +3,7 @@ import { IpgController } from './ipg.controller';
 import { IpgService } from './ipg.service';
 import { OrmModule, PackageEntity, PackageProductEntity, PackageVersionEntity, PackageVersionRepository, ProductEntity, ProductGroupEntity, SharedModule } from '@app/shared';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PaymentGatewayEntity } from '@app/shared/entities/paymentGateway.entity';
+import { PaymentGatewayEntity } from '@app/shared/entities/payment-gateway.entity';
 import { PaymentGatewayRepository } from '@app/shared/repositories/paymentGateway.repository';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';

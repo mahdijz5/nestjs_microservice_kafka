@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
-import { PackageVersionEntity } from "./packageVersion.entity";
-import { PaymentGatewayEntity } from "./paymentGateway.entity";
+import { PackageVersionEntity } from "./package-version.entity";
+import { PaymentGatewayEntity } from "./payment-gateway.entity";
 
 
 

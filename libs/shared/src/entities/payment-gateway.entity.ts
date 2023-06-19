@@ -1,6 +1,6 @@
 import {  Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
-import { PackageVersionEntity } from "./packageVersion.entity";
+import { PackageVersionEntity } from "./package-version.entity";
 import { OrderEntity } from "./order.entity";
  
 
