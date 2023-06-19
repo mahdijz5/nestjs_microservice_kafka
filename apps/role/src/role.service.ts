@@ -1,42 +1,43 @@
-import { RoleEntity, RoleRepositoryInterface } from '@app/shared';
+import { RoleEntity, RoleRepositoryInterface, UserRoleEntity, UserRoleRepositoryInterface } from '@app/shared';
 import { Injectable,Inject ,BadRequestException,NotFoundException} from '@nestjs/common';
 import { GetAppropriateRoleDto } from './dto/getAppropriateRole.dto';
 import { Any } from 'typeorm';
 import { CreateRoleParams, UpdateRoleParams } from './utils/types';
+import { isEmpty } from './utils/tools';
 
 @Injectable()
 export class RoleService {
-  constructor(@Inject('RoleRepositoryInterface') private readonly roleRepository: RoleRepositoryInterface){}
+  constructor(@Inject('RoleRepositoryInterface') private readonly roleRepository: RoleRepositoryInterface,@Inject('UserRolesRepositoryInterface') private readonly userRoleRepository : UserRoleRepositoryInterface){}
 
 
   async getAppropriateRole(data : GetAppropriateRoleDto) : Promise<RoleEntity[]> {
     try {
-      if(data.role.length <= 0 ) {
-        return await this.roleRepository.findAll({
-          where : {
-            name : "user"
-          }
-        })
-      }
-    
-        const role = await this.roleRepository.findAll({
+      let roles : RoleEntity[]
+  
+        
+        roles = await this.roleRepository.findAll({
           where : {
             name : Any([...data.role])
           }
         })
 
-        if(!role || role.length > 0) {
-          return await this.roleRepository.findAll({
+        if(isEmpty(roles)) {
+          roles= await this.roleRepository.findAll({
             where : {
               name : "user"
             }
           })
         }
         
-        return role
+        for(let role of roles) {
+          await this.userRoleRepository.save(this.userRoleRepository.create({user : data.user, role : role}))
+        }
+        
+        return roles
       
     
     } catch (error) {
+      console.log(error)
       throw error
     }
   }

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RoleController } from './role.controller';
 import { RoleService } from './role.service';
-import { OrmModule, RoleEntity, RoleRepository, SharedModule, UserEntity, UserRoleEntity } from '@app/shared';
+import { OrmModule, RoleEntity, RoleRepository, SharedModule, UserEntity, UserRoleEntity, UserRoleRepository } from '@app/shared';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -13,6 +13,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   providers: [RoleService,{
     provide : "RoleRepositoryInterface",
     useClass : RoleRepository
+  },
+  {
+    provide : "UserRolesRepositoryInterface",
+    useClass : UserRoleRepository
   }],
 })
 

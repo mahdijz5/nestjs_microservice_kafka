@@ -57,20 +57,10 @@ export class AuthService implements OnModuleInit {
       const userData :CreateUserParams= await this.cacheManager.get(`userData-${token.tokenId}-${token.username}`)
       
       const user =  this.usersRepository.create(userData)
-      const userRole = await this.userRolesRepository.create({user})  
-      // let role : RoleEntity
-      
-
-      // if(userData.role.length > 0 ) {
-      //   role = await firstValueFrom(this.roleService.send("get-appropriate-role",{role : userData?.role || []}))
-      // }
-
       await this.usersRepository.save(user);
       
-      userRole.user = user
-      // userRole.role = role
-      
-      await this.userRolesRepository.save(userRole)
+      this.roleService.emit("get-appropriate-role",{role : userData?.role || [] , user})
+                
     } catch (error) {
       throw error
     }
