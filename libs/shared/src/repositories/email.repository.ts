@@ -13,8 +13,8 @@ export class EmailRepository
 {
   constructor(
     @InjectRepository(EmailEntity)
-    private readonly UserRepository: Repository<EmailEntity>,
+    private readonly EmailRepository: Repository<EmailEntity>,
   ) {
-    super(UserRepository);
+    super(EmailRepository);
   }
 }

@@ -61,6 +61,7 @@ export class AuthController {
       throw error
     }
   } 
+  
   @MessagePattern("reset-password")
   async resetPassword(@Payload() data : ResetPasswordDto){
     try {

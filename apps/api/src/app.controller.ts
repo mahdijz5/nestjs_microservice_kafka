@@ -186,12 +186,22 @@ export class AppController implements OnModuleInit {
     return this.ipgService.send("remove-ipg",{id})
   }
   
+  @Post("ipg/pay")
+  handlePayment(@Body() data) {
+    return this.ipgService.send("handle-payment",data)
+  }
+  
+  @Get("ipg/payment-result")
+  paymentCallback(@Query() data) {
+    return this.ipgService.send("payment-callback",data)
+  }
+  
 
   onModuleInit() {
 
     const authSubscribedResponses = ["get-users","register-user","login-user","auth","verify-email","forgot-password","reset-password" ]
     const roleSubscribedResponses =  ["get-all-roles","get-role","edit-role","remove-role","create-role"]
-    const ipgSubscribedResponses =  ['get-all-ipg','get-ipg','create-ipg','update-ipg','remove-ipg']
+    const ipgSubscribedResponses =  ['get-all-ipg','get-ipg','create-ipg','update-ipg','remove-ipg',"handle-payment","payment-callback"]
     const productSubscribedResponses = ["create-product","update-product" ,"remove-product","create-package","update-package" ,"remove-package","create-product-group","update-product-group","remove-product-group","get-product","get-package","get-product-group","get-all-product","get-all-package","get-all-product-group"]
 
 

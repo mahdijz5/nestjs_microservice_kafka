@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",
+    "@nestjs/axios": "^3.0.0",
     "@nestjs/cache-manager": "^1.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",

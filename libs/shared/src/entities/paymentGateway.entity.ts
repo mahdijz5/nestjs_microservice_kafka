@@ -7,8 +7,8 @@ import { OrderEntity } from "./order.entity";
 @Entity()
 export class PaymentGatewayEntity extends BaseEntity {
 
-    // @OneToMany(() => OrderEntity, (order) => order.payment_gatway)
-    // order : OrderEntity[]
+    @OneToMany(() => OrderEntity, (order) => order.payment_gatway)
+    order : OrderEntity[]
 
     @Column()
     name : string

@@ -1,27 +1,28 @@
-import {  Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { PackageVersionEntity } from "./packageVersion.entity";
 import { PaymentGatewayEntity } from "./paymentGateway.entity";
 
-enum Type {
-    Online  = "Online",
-    Wallet = "Wallet",
-    Other = "Other"
-  }
 
 
 @Entity()
 export class OrderEntity extends BaseEntity {
-    @JoinColumn()
-    @ManyToOne(() => PackageVersionEntity,(ver) => ver.order,{onDelete : "SET NULL"})
-    packageVersion : PackageVersionEntity
+  @PrimaryGeneratedColumn({
+    type: "bigint"
+  })
+  id_order: number
 
-    @Column({type : "varchar"})
-    type: Type
+  @JoinColumn()
+  @ManyToOne(() => PackageVersionEntity, (ver) => ver.order, { onDelete: "SET NULL" })
+  packageVersion: PackageVersionEntity
 
-    @Column()
-    id_payment : string
+  @Column({ type: "varchar" })
+  type: "online" | "wallet" | "other"
 
-    // @ManyToOne(() => PaymentGatewayEntity, (gateway) => gateway.order,{onDelete : "SET NULL"})
-    // payment_gatway : PaymentGatewayEntity
+  @Column()
+  id_payment : string
+
+  @JoinColumn()
+  @ManyToOne(() => PaymentGatewayEntity, (gateway) => gateway.order, { onDelete: "SET NULL" })
+  payment_gatway: PaymentGatewayEntity
 }
