@@ -16,10 +16,28 @@ export class AppController implements OnModuleInit {
   @Get('user/:id')
   async getUsers(@Param("id") id: string) {
     try {
-      return await firstValueFrom(this.authService.send('get-users', { id }))
+      return await firstValueFrom(this.authService.send('get-user', { id }))
     } catch (error) {
       throw error
     }
+  }
+
+  @Get('user-tree/:id')
+  async getTreeOfUser(@Param("id") id: string) {
+    try {
+      return await firstValueFrom(this.authService.send('get-tree-of-user', { id }))
+    } catch (error) {
+      throw error
+    }
+  }
+  
+  @Get("users")
+  async  getAllUser() {
+      try {
+          return await this.authService.send("get-all-user",{})
+      } catch (error) {
+        throw error
+      }
   }
 
   @Post('register')
@@ -225,7 +243,7 @@ export class AppController implements OnModuleInit {
 
   onModuleInit() {
 
-    const authSubscribedResponses = ["get-users","register-user","login-user","auth","verify-email","forgot-password","reset-password" ]
+    const authSubscribedResponses = ["get-tree-of-user","get-user","get-all-user","register-user","login-user","auth","verify-email","forgot-password","reset-password" ]
     const roleSubscribedResponses =  ["get-all-roles","get-role","edit-role","remove-role","create-role"]
     const seasonSubscribedResponses =  ["get-all-seasons","get-season","edit-season","remove-season","create-season"]
     const ipgSubscribedResponses =  ['get-all-ipg','get-ipg','create-ipg','update-ipg','remove-ipg',"handle-payment","payment-callback"]

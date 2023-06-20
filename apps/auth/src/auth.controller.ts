@@ -12,8 +12,28 @@ export class AuthController {
   constructor(private readonly authService: AuthService,
     private readonly sharedService: SharedService ,) { }
 
-  @MessagePattern('get-users')
-  async getUser(@Payload() message: { id: string },@Session() session) {
+  @MessagePattern('get-all-user')
+  async getAllUsers(@Payload() message: { id: string }) {
+    try {
+      const user = await this.authService.getAllUser()
+      return { ...user }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  @MessagePattern('get-tree-of-user')
+  async getTreeOfUser(@Payload() message: { id: string }) {
+    try {
+      const user = await this.authService.getTreeOf(message.id)
+      return { ...user }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  @MessagePattern('get-user')
+  async getUser(@Payload() message: { id: string }) {
     try {
       const user = await this.authService.getUser(message.id)
       return { ...user }

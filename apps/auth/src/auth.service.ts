@@ -1,5 +1,5 @@
 import { firstValueFrom } from 'rxjs';
-import { RoleEntity, UserRepositoryInterface, UserRoleRepositoryInterface } from '@app/shared';
+import { RoleEntity, UserEntity, UserRepositoryInterface, UserRoleRepositoryInterface } from '@app/shared';
 import { Injectable, Inject, BadRequestException, NotFoundException, UnauthorizedException, OnModuleInit } from '@nestjs/common';
 import { LoginUserDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
@@ -14,7 +14,20 @@ import {generate} from 'shortid';
 export class AuthService   {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache,@Inject('UsersRepositoryInterface') private readonly usersRepository: UserRepositoryInterface,@Inject('UserRolesRepositoryInterface') private readonly userRolesRepository: UserRoleRepositoryInterface, private jwtService: JwtService,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka,@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka ) {}
   
+  async getAllUser() {
+    return await this.usersRepository.manager().getTreeRepository(UserEntity).findTrees()
+   
+  }
+  
+  async getTreeOf(userId : string) {
+    let user = await this.usersRepository.findByCondition({where : {id : userId}})
+    if(!user) throw new NotFoundException()
+    return await this.usersRepository.manager().getTreeRepository(UserEntity).findDescendantsTree(user)
 
+  
+  }
+
+ 
   async getUser(id: string){
     const user =await this.usersRepository.findOneById(id)
     if(!user) {

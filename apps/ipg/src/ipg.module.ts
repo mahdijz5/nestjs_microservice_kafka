@@ -4,7 +4,7 @@ import { IpgService } from './ipg.service';
 import { OrmModule, PackageEntity, PackageProductEntity, PackageVersionEntity, PackageVersionRepository, ProductEntity, ProductGroupEntity, SharedModule } from '@app/shared';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PaymentGatewayEntity } from '@app/shared/entities/payment-gateway.entity';
-import { PaymentGatewayRepository } from '@app/shared/repositories/paymentGateway.repository';
+import { PaymentGatewayRepository } from '@app/shared/repositories/payment-gateway.repository';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { OrderEntity } from '@app/shared/entities/order.entity';

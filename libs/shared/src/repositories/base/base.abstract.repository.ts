@@ -1,5 +1,6 @@
 import {
     DeepPartial,
+    EntityManager,
     FindManyOptions,
     FindOneOptions,
     FindOptionsWhere,
@@ -31,6 +32,10 @@ export abstract class BaseAbstractRepository<T extends HasId>
     }
     public createMany(data: DeepPartial<T>[]): T[] {
         return this.entity.create(data);
+    }
+ 
+    public manager(): EntityManager {
+        return this.entity.manager;
     }
  
 
