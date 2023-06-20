@@ -1,4 +1,4 @@
-import { PaymentGatewayRepositoryInterface } from '@app/shared/interfaces/paymentGateway.repository.interface';
+import { PaymentGatewayRepositoryInterface } from '@app/shared/interfaces/payment-gateway.repository.interface';
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { AcceptPaymentParams, AcceptPaymentResultParams, CreateIpgParams, CreatePaymentParams, PaymentCallbackParms, RequsetPaymentParams, RequsetPaymentResultParams, UpdateIpgParams, searchPgParams } from './utils/type';
 import { HttpService } from "@nestjs/axios"

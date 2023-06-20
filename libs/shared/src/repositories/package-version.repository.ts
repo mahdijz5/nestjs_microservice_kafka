@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BaseAbstractRepository } from './base/base.abstract.repository';
 import { PackageVersionEntity } from '../entities/package-version.entity';
-import { PackageVersionRepositoryInterface } from '../interfaces/packageVersion.repository.interface';
+import { PackageVersionRepositoryInterface } from '../interfaces/package-version.repository.interface';
 
 @Injectable()
 export class PackageVersionRepository

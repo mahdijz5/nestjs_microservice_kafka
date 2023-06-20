@@ -1,10 +1,10 @@
-import { ProductEntity } from './../entities/product.entity';
+import { ProductEntity } from '../entities/product.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BaseAbstractRepository } from './base/base.abstract.repository';
 import { ProductRepositoryInterface } from '../interfaces/product.repository.interface';
-import { ProductGroupRepositoryInterface } from '../interfaces/productGroup.repository.interface';
+import { ProductGroupRepositoryInterface } from '../interfaces/product-group.repository.interface';
 import { ProductGroupEntity } from '../entities/product-group.entity';
 
 @Injectable()

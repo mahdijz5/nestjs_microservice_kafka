@@ -3,7 +3,7 @@ import { BaseEntity } from "./base.entity";
 
 
 @Entity()
-export class CourseEntity extends BaseEntity {
+export class SeasonEntity extends BaseEntity {
     @Column({
         unique : true,
         type : "varchar"

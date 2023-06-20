@@ -1,6 +1,6 @@
 import {  IsString,IsEmail, Length, IsArray, IsNotEmpty, IsNumber } from "class-validator"
 
-export class UpdateCourseDto {
+export class UpdateSeasonDto {
 
     @IsString()
     @Length(0, 150)

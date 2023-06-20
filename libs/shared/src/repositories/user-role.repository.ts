@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BaseAbstractRepository } from './base/base.abstract.repository';
-import { UserRoleEntity } from '../entities/junction-tables/userRole.entity';
+import { UserRoleEntity } from '../entities/junction-tables/user-role.entity';
 
 @Injectable()
 export class UserRoleRepository
