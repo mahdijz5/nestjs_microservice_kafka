@@ -27,7 +27,7 @@ export * from "./interfaces/package-version.repository.interface"
 export * from "./interfaces/product.repository.interface"
 export * from "./interfaces/product-group.repository.interface"
 export * from "./interfaces/package-products.repository.interface"
-export * from "./interfaces/userRole.repository.interface"
+export * from "./interfaces/user-role.repository.interface"
 export * from './interfaces/shared.service.interface';
 
 //repositories

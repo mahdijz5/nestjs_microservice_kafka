@@ -1,15 +1,12 @@
 export type CreateSeasonParams = {
-    from : string
-    to : string
-    name : string
-    type : "calculation" | "beginning"
+    from : Date
+    to : Date
+    type : "calculated" | "beginning"
 }
 
 export type updateSeasonParams = {
     id : string
-    from ?: string
-    to? : string
-    name? : string
-    rate? : number
-    type? : "calculation" | "beginning"
+    from ?: Date
+    to? : Date
+    type? : "calculated" | "beginning"
 }

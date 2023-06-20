@@ -6,7 +6,7 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { Cron, CronExpression } from '@nestjs/schedule';
 @Controller()
 export class AppController implements OnModuleInit {
-  constructor(@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka,@Inject('AUTH_SERVICE') private readonly authService: ClientKafka,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ,@Inject('PRODUCT_SERVICE') private readonly productService: ClientKafka,@Inject("IPG_SERVICE") private readonly ipgService : ClientKafka,@Inject("COURSE_SERVICE") private readonly seasonService : ClientKafka) { }
+  constructor(@Inject('ROLE_SERVICE') private readonly roleService: ClientKafka,@Inject('AUTH_SERVICE') private readonly authService: ClientKafka,@Inject('EMAIL_SERVICE') private readonly emailService: ClientKafka ,@Inject('PRODUCT_SERVICE') private readonly productService: ClientKafka,@Inject("IPG_SERVICE") private readonly ipgService : ClientKafka,@Inject("SEASON_SERVICE") private readonly seasonService : ClientKafka) { }
 
   @Cron(CronExpression.EVERY_5_SECONDS)
   async HandleMonitorGmailService() {
@@ -96,17 +96,17 @@ export class AppController implements OnModuleInit {
     return this.seasonService.send("get-season",{id})
   }
   
-  @Get("season/create-season")
-  createSeason(data) {
-    return this.seasonService.send("create-get",data)
+  @Post("season/create-season")
+  createSeason(@Body() data) {
+    return this.seasonService.send("create-season",{...data})
   }
 
-  @Get("season/edit-season/:id")
-  editSeason(data , @Param("id") id :string) {
+  @Put("season/edit-season/:id")
+  editSeason(@Body() data , @Param("id") id :string) {
     return this.seasonService.send("edit-season",{...data,id})
   }
 
-  @Get("season/remove-season/:id")
+  @Delete("season/remove-season/:id")
   removeSeason(@Param("id") id :string) {
     return this.seasonService.send("remove-season",{id})
   }

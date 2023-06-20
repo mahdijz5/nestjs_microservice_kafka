@@ -25,12 +25,9 @@ export class SeasonService {
 
   async createSeason(data : CreateSeasonParams) {
     try {
-      const isExist = await this.seasonRepository.findByCondition({where : {name : data.name}})
-      if(isExist) throw new BadRequestException()
-
-      const season = this.seasonRepository.create(data);
+      const season = this.seasonRepository.create({...data});
       
-      return await this.seasonRepository.save(season)
+      return {...await this.seasonRepository.save(season)}
     } catch (error) {
       throw error
     }
@@ -41,10 +38,10 @@ export class SeasonService {
       const season = await this.seasonRepository.findByCondition({where : {id : data.id}})
       if(!season) throw new NotFoundException()
 
-      return await this.seasonRepository.save({
+      return {...await this.seasonRepository.save({
         ...season,
         ...data
-      })
+      })}
     } catch (error) {
       throw error
     }

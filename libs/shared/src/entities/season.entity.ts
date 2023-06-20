@@ -1,32 +1,29 @@
-import {  Column, Entity } from "typeorm";
+import { Column, Entity } from "typeorm";
 import { BaseEntity } from "./base.entity";
 
+export enum seasonType {
+    CALCULATED = "calculated",
+    BEGINNING = "beginning"
+}
 
 @Entity()
 export class SeasonEntity extends BaseEntity {
     @Column({
-        unique : true,
-        type : "varchar"
+        type: "timestamp",
+        default : new Date().toISOString()
     })
-    name : string
-    
-    @Column({
-        type: "varchar",
-    })
-    from: string
+    from: Date
 
     @Column({
-        type: "varchar",
+        type: "timestamp",
+        default : new Date().toISOString()
     })
-    to: string
+    to: Date
 
     @Column({
-        type: "varchar",
+        type: "enum",
+        enum : seasonType,
+        default : seasonType.BEGINNING
     })
-    type: "calculation" | "beginning"
-
-
-    @Column({type : "int2"})
-    rate :number
-
+    type: "calculated" | "beginning"
 }

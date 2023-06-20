@@ -9,8 +9,8 @@ import { SeasonRepository } from '@app/shared/repositories/season.repository';
 @Module({
   imports: [
     SharedModule,
+    TypeOrmModule.forFeature([SeasonEntity]),
     OrmModule,
-    TypeOrmModule.forFeature([SeasonEntity])
   ],
   controllers: [SeasonController],
   providers: [SeasonService,{

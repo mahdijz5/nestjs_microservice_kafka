@@ -10,7 +10,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService); 
   const sharedService = app.get(SharedService);
 
-  const customer = configService.get('KAFKA_COURSE_CONSUMER');
+  const customer = configService.get('KAFKA_SEASON_CONSUMER');
 
   app.connectMicroservice(sharedService.getRmqOptions(customer));
   app.startAllMicroservices();

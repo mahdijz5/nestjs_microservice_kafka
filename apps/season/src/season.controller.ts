@@ -1,9 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
+import {UseFilters, Controller, Get } from '@nestjs/common';
 import { SeasonService } from './season.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateSeasonDto } from './dto/create-season.dto';
 import { UpdateSeasonDto } from './dto/update-season.dto';
+import { HttpExceptionFilter } from '@app/shared';
 
+@UseFilters(HttpExceptionFilter)
 @Controller()
 export class SeasonController {
   constructor(private readonly seasonService: SeasonService) { }
@@ -23,22 +25,25 @@ export class SeasonController {
       throw error
     }
   }
+
   @MessagePattern("create-season")
   async createSeason(@Payload() data: CreateSeasonDto) {
     try {
-      return { ...await this.seasonService.createSeason(data) }
+      return await this.seasonService.createSeason(data) 
     } catch (error) {
       throw error
     }
   }
+
   @MessagePattern("edit-season")
   async editSeason(@Payload() data: UpdateSeasonDto) {
     try {
-      return { ...await this.seasonService.editSeason(data) }
+      return await this.seasonService.editSeason(data)
     } catch (error) {
       throw error
     }
   }
+
   @MessagePattern("remove-season")
   async removeSeason(@Payload() data: { id: string }) {
     try {
